@@ -5,8 +5,8 @@
 #include "textutils.h"
 #include "database.h"
 
-char* gen_key(struct Book *book){
-	char *key = to_upper(book->title);
+char* gen_key(char* string){
+	char *key = to_upper(string);
 	clean(key);
 	return key;
 }
@@ -61,10 +61,20 @@ int insert_in_hash( DB *db, struct Book *book, unsigned long hash){
 
 int add_book(DB *db, struct Book *book){
 	//Generate hash address for the book
-	unsigned long hash = gen_hash(gen_key(book));
-	int offset =  insert_in_hash(db, book, 195331358866503712);
+	unsigned long hash = gen_hash(gen_key(book->title));
+	int offset =  insert_in_hash(db, book, hash);
 	printf("Returned offset : %d\n", offset);
 	return offset;
+}
+
+struct Book* find_book(DB *db, char* title){
+	int key = gen_hash(gen_key(title))%997;
+	if(key_in_table(key, &db->library)!=-1){
+		return &db->library.books[key];
+	} else {
+		printf("Book not found\n");
+		return NULL;
+	}
 }
 
 #endif

@@ -36,10 +36,11 @@ int main(){
 	
 	for(i = 0; i < db.library.book_count; i++){
 		struct Book b = db.library.books[db.library.keys[i]];
-		printf("%-20s%-20s%-20s\n", b.title, b.author, b.publisher);
+		printf("%-20s%-20s%-20s\t%d\n", b.title, b.author, b.publisher, b.id);
 	}
+	//printf("%s\n", find_book(&db, "Harry Potter")->author);
 	struct Book book = {"Physics", "J.K. Rowling", "Bloomsbury", 0, 20};
-	printf("%d\n", add_book(&db, &book));
+	//printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	printf("\n%d\n", verify_fn(fn));
 	
