@@ -20,6 +20,7 @@ void ask_pass(){
 }
 
 int main(){
+	int i = 0;
 	if(load(&db)==0){
 		printf("Database load failed. Terminating");
 		return;
@@ -28,12 +29,16 @@ int main(){
 	printf("%s\n", db.password);
 	char* fn = "14peb049";
 	
-	if(strcmp(db.password, "0000")==0){
+	/*if(strcmp(db.password, "0000")==0){
 		ask_pass();
-	}
+	}*/
 	
-	struct Book book = {"Harry Potter", "J.K. Rowling", "Bloomsbury", 0, 20};
-
+	
+	for(i = 0; i < db.library.book_count; i++){
+		struct Book b = db.library.books[db.library.keys[i]];
+		printf("%-20s%-20s%-20s\n", b.title, b.author, b.publisher);
+	}
+	struct Book book = {"Physics", "J.K. Rowling", "Bloomsbury", 0, 20};
 	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	printf("\n%d\n", verify_fn(fn));

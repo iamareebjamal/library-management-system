@@ -31,25 +31,40 @@ int key_in_table(int key, struct Library *library){
 	return -1;
 }
 
-int add_book(DB *db, struct Book *book){
-	//Generate hash address for the book
-	int hash = gen_hash(gen_key(book))%997;
+int insert_in_hash( DB *db, struct Book *book, unsigned long hash){
+	int offset = hash%997;
+	printf("%lu\n", hash);
 	//Check if the address is pre-occupied
-	if(key_in_table(hash, &db->library)==-1){
-		book->id = hash;
+	if(key_in_table(offset, &db->library)==-1){
+		book->id = offset;
 		struct Library *lib = &db->library;
 		int *index = &(lib->book_count);
-		lib->keys[*index] = hash;
-		lib->books[hash] = *book;
+		lib->keys[*index] = offset;
+		lib->books[offset] = *book;
 		(*index)++;
 		save(db);
-		return hash;
+		printf("Book entered\n");
+		printf("Offset : %d\n", offset);
+		return offset;
 	} else {
 		//Either Collision has occurred or same ID book is being added again!
 		//Let's find out what?
-
+		if(strcmp(db->library.books[offset].title, book->title)==0){
+			printf("Same Book entered\tOffset : %d\n", offset);
+			return -1;
+		} else {
+			printf("Collision\n");
+			insert_in_hash(db, book, hash+1);
+		}
 	}
-	return 0;
+}
+
+int add_book(DB *db, struct Book *book){
+	//Generate hash address for the book
+	unsigned long hash = gen_hash(gen_key(book));
+	int offset =  insert_in_hash(db, book, 195331358866503712);
+	printf("Returned offset : %d\n", offset);
+	return offset;
 }
 
 #endif
