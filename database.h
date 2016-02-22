@@ -2,7 +2,10 @@
 #define DB_H
 
 #include <string.h>
+#include "textutils.h"
 
+//#define PATH "/sdcard/AppProjects/Algorithm/jni/db.bin"
+#define PATH "db.bin"
 
 struct Book{
 	char title[40];
@@ -35,15 +38,15 @@ struct Transactions{
 	int return_count;
 };
 
-struct DB{
+typedef struct DB{
 	struct Transactions transactions;
 	struct Library library;
 	char password[15];
-};
+} DB;
 
-void save(DB *db);
-void init(DB* db);
-DB load();
+int save(DB*);
+int init(DB*);
+int load(DB*);
 
 /* Setters */
 
@@ -56,18 +59,21 @@ int set_password(DB *db, const char* password){
 	return 0;
 }
 
-
-
 /* File Operations */
 
-void save(DB *db){
+int save(DB *db){
 	FILE *fo;
-	fo = fopen("/sdcard/AppProjects/Algorithm/jni/db.bin", "wb");
+	fo = fopen(PATH, "wb");
+	if(fo==NULL){
+		printf("File Write Error!\n");
+		return 0;
+	}
 	fwrite(db, sizeof(DB), 1, fo);
 	fclose(fo);
+	return 1;
 }
 
-void init(DB* db){
+int init(DB* db){
 	printf("Creating new Database...\n");
 	char* pass = "0000";
 	printf("Values Initialised...\n");
@@ -75,21 +81,22 @@ void init(DB* db){
 	db->transactions.return_count = 0;
 	db->library.book_count = 0;
 	strcpy(db->password, pass);
-	save(db);
+	return save(db);
 }
 
-DB load(){
-	DB di;
+int load(DB *di){
 	FILE *fi;
-	fi = fopen("/sdcard/AppProjects/Algorithm/jni/db.bin", "rb");
+	fi = fopen(PATH, "rb");
 	if(fi==NULL){
-		init(&di);
-		return di;
+		if(init(di)==0){
+			return 0;
+		}
+		return 1;
 	}
 	printf("Reading old Database...\n");
-	fread(&di, sizeof(DB), 1, fi);
+	fread(di, sizeof(DB), 1, fi);
 	fclose(fi);
-	return di;
+	return 1;
 }
 
 #endif

@@ -2,11 +2,11 @@
 #define HASH_H
 
 #include <stdio.h>
-#include <textutils.h>
-#include <database.h>
+#include "textutils.h"
+#include "database.h"
 
 char* gen_key(struct Book *book){
-	char *key = to_upper(combine(book->title, book->author, book->publisher));
+	char *key = to_upper(book->title);
 	clean(key);
 	return key;
 }
@@ -32,15 +32,24 @@ int key_in_table(int key, struct Library *library){
 }
 
 int add_book(DB *db, struct Book *book){
+	//Generate hash address for the book
 	int hash = gen_hash(gen_key(book))%997;
-	book->id = hash;
-	struct Library *lib = &db->library;
-	int *index = &(lib->book_count);
-	lib->keys[*index] = hash;
-	lib->books[hash] = *book;
-	(*index)++;
-	save(db);
-	return hash;
+	//Check if the address is pre-occupied
+	if(key_in_table(hash, &db->library)==-1){
+		book->id = hash;
+		struct Library *lib = &db->library;
+		int *index = &(lib->book_count);
+		lib->keys[*index] = hash;
+		lib->books[hash] = *book;
+		(*index)++;
+		save(db);
+		return hash;
+	} else {
+		//Either Collision has occurred or same ID book is being added again!
+		//Let's find out what?
+
+	}
+	return 0;
 }
 
 #endif
