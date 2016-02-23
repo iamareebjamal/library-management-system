@@ -42,9 +42,9 @@ int insert_in_hash( DB *db, struct Book *book, unsigned long hash){
 		lib->keys[*index] = offset;
 		lib->books[offset] = *book;
 		(*index)++;
-		save(db);
 		printf("Book entered\n");
 		printf("Offset : %d\n", offset);
+		save(db);
 		return offset;
 	} else {
 		//Either Collision has occurred or same ID book is being added again!
@@ -67,14 +67,41 @@ int add_book(DB *db, struct Book *book){
 	return offset;
 }
 
-struct Book* find_book(DB *db, char* title){
-	int key = gen_hash(gen_key(title))%997;
-	if(key_in_table(key, &db->library)!=-1){
-		return &db->library.books[key];
+struct Book* find_by_id(DB *db, int id){
+	
+	if(key_in_table(id, &db->library)==-1){
+		printf("Book not found...\n");
+		return NULL;
 	} else {
-		printf("Book not found\n");
+		return &db->library.books[id];
+	}
+}
+
+struct Book* find_book(DB *db, char* title){
+	unsigned long key = gen_hash(gen_key(title));
+	
+	int offset = key%997;
+	
+	while(strcmp(db->library.books[offset].title, title)!=0){
+		offset = (++key)%997;
+		if(key_in_table(offset, &db->library)==-1){
+			break;
+		}
+	}
+
+	if(strcmp(db->library.books[offset].title, title)==0){
+		return &db->library.books[offset];
+	} else {
+		printf("Book not found...\n");
 		return NULL;
 	}
+	
+}
+
+//Fuzzy Search of Books by title, author or publisher. Returns an integer array 
+//containing the id of books
+int* search_books(DB *db, char* title, int mode){
+
 }
 
 #endif

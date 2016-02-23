@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include "textutils.h"
-#include "database.h"
 #include "hash.h"
 
 DB  db;
@@ -19,28 +17,44 @@ void ask_pass(){
 	}
 }
 
-int main(){
-	int i = 0;
-	if(load(&db)==0){
-		printf("Database load failed. Terminating");
-		return;
-	}
-
-	printf("%s\n", db.password);
-	char* fn = "14peb049";
-	
-	/*if(strcmp(db.password, "0000")==0){
-		ask_pass();
-	}*/
-	
-	
+void print_books(){
+	//Print all the entered books
+	int i;
 	for(i = 0; i < db.library.book_count; i++){
 		struct Book b = db.library.books[db.library.keys[i]];
 		printf("%-20s%-20s%-20s\t%d\n", b.title, b.author, b.publisher, b.id);
 	}
-	//printf("%s\n", find_book(&db, "Harry Potter")->author);
-	struct Book book = {"Physics", "J.K. Rowling", "Bloomsbury", 0, 20};
-	//printf("%d\n", add_book(&db, &book));
+}
+
+void print_test(int* a, int size){
+	int i = 0;
+	for(i = 0; i < size; i++){
+		printf("%d  ", a[i]);
+	}
+	printf("\n");
+}
+
+int main(){
+	int i = 0;
+	if(load(&db)==0){
+		printf("Database load failed. Terminating");
+		return 0;
+	}
+
+	printf("%s\n", db.password);
+	char* fn = "14peb049";
+
+	//delete_book(&db, find_book(&db, "YUBLGSRC"));
+	
+	/*if(strcmp(db.password, "0000")==0){
+		ask_pass();
+	}*/
+	print_books();
+	struct Book *found = find_book(&db, "MKAWER");
+	if(found!=NULL)
+		printf("id %s\n", found->title);
+	struct Book book = {"MKAWER", "J.K. Rowling", "Bloomsbury", 0, 20};
+	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	printf("\n%d\n", verify_fn(fn));
 	
