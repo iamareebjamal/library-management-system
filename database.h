@@ -23,13 +23,13 @@ struct Library {
 
 struct Transactions {
 	struct Issues {
-		char fac_no[6];
+		char fac_no[8];
 		int date;
 		int book_id;
 	} issues[1000];
 
 	struct Returns {
-		char fac_no[6];
+		char fac_no[8];
 		int date;
 		int book_id;
 	} returns[1000];
