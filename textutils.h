@@ -18,15 +18,16 @@ char* to_upper(const char* s){
 	char* up = strdup(s);
 	char* to = up;
 	while(*to){
-		*to++=toupper(*to);
+		*to=toupper(*to);
+		to++;
 	}
 	return up;
 }
 
-int verify_fn(const char* fn){
+int verify_fn(char* fn){
 	int n = len(fn);
-	fn = to_upper(fn);
 	if(n==8){
+		fn = to_upper(fn);
 		regex_t regex;
 		char* pattern = \
 		"[0-1][0-9][PCLEM]"\
@@ -37,12 +38,15 @@ int verify_fn(const char* fn){
 			return 0;
 		}
 		reti = regexec(&regex, fn, 0, NULL, 0);
+		free(fn);
+		regfree(&regex);
 		return !reti;
 	}
+	
 	return 0;
 }
 
-int verify_pass(const char* pass){
+int verify_pass(char* pass){
 	int n = len(pass);
 	pass = to_upper(pass);
 	if(n>=8&&n<=16){
@@ -52,20 +56,26 @@ int verify_pass(const char* pass){
 		}
 		return 1;
 	}
+	free(pass);
 	return 0;
 }
 
+void safe_copy(char* to, char* from, size_t len){
+	while(len--){
+		*to++ = *from++;
+	}
+	*to = '\0';
+}
+
 void clean(char* s){
-	char cleaned[len(s)];
 	int i,j=0;
 	for(i=0; i<len(s); i++){
 		char c = s[i];
 		if((c>='A'&&c<='Z')||(c>='0'&&c<='9')){
-			cleaned[j++] = c;
+			s[j++] = c;
 		}
 	}
-	cleaned[j]='\0';
-	strcpy(s, cleaned);
+	s[j]='\0';
 }
 
 char* combine(char* t, char* a, char* p){

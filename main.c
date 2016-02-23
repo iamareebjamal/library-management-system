@@ -34,6 +34,18 @@ void print_test(int* a, int size){
 	printf("\n");
 }
 
+void list_books(){
+	int *list = search_books(&db, "J.K", AUTHOR);
+	int size = *list;
+	printf("%d\n", size);
+	int i;
+	for(i=1;i<=size;i++){
+		struct Book *b = find_by_id(&db, list[i]);
+		printf("%-20s%-20s%-20s\t%d\n", b->title, b->author, b->publisher, b->id);
+	}
+	free(list);
+}
+
 int main(){
 	int i = 0;
 	if(load(&db)==0){
@@ -48,13 +60,17 @@ int main(){
 		ask_pass();
 	}*/
 	print_books();
+	printf("\n\n\n");
+	list_books();
+
+	/*
 	struct Book *found = find_book(&db, "MKAWER");
 	if(found!=NULL)
-		printf("id %s\n", found->title);
-	struct Book book = {"MKAWER", "J.K. Rowling", "Bloomsbury", 0, 20};
-	printf("%d\n", add_book(&db, &book));
+		printf("id %s\n", found->title);*/
+	struct Book book = {"Harry Potter", "J.K. Rowling", "Bloomsbury", 0, 20};
+	//printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
-	printf("\n%d\n", verify_fn(fn));
+	printf("\nPattern Match\t%d\n", verify_fn(fn));
 	
 	return 0;
 }

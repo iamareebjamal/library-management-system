@@ -2,8 +2,11 @@
 #define HASH_H
 
 #include <stdio.h>
-#include "textutils.h"
 #include "database.h"
+
+const int TITLE     = 0;
+static int AUTHOR    = 1;
+static int PUBLISHER = 2;
 
 char* gen_key(char* string){
 	char *key = to_upper(string);
@@ -77,6 +80,7 @@ struct Book* find_by_id(DB *db, int id){
 	}
 }
 
+/* Find a book by its exact title */
 struct Book* find_book(DB *db, char* title){
 	unsigned long key = gen_hash(gen_key(title));
 	
@@ -100,8 +104,56 @@ struct Book* find_book(DB *db, char* title){
 
 //Fuzzy Search of Books by title, author or publisher. Returns an integer array 
 //containing the id of books
-int* search_books(DB *db, char* title, int mode){
-
+int* search_books(DB *db, char* search, int mode){
+	int i;
+	int *list = calloc(1000, sizeof(int));
+	char* pattern = to_upper(search);
+	clean(pattern);
+	list[0]=0; //Setting size to 0
+	switch(mode){
+		case 0:
+			for(i=0; i < db->library.book_count; i++){
+				struct Book book = db->library.books[db->library.keys[i]];
+				char* matcher = to_upper(book.title);
+				clean(matcher);
+				if(strstr(matcher, pattern)!=NULL){
+					list[++list[0]] = book.id;
+				}
+				free(matcher);
+			}
+			free(pattern);
+			return list;
+			break;
+		case 1:
+			for(i=0; i < db->library.book_count; i++){
+				struct Book book = db->library.books[db->library.keys[i]];
+				char* matcher = to_upper(book.author);
+				clean(matcher);
+				if(strstr((matcher), pattern)!=NULL){
+					list[++list[0]] = book.id;
+				}
+				free(matcher);
+			}
+			free(pattern);
+			return list;
+			break;
+		case 2:
+			for(i=0; i < db->library.book_count; i++){
+				struct Book book = db->library.books[db->library.keys[i]];
+				char* matcher = to_upper(book.publisher);
+				clean(matcher);
+				if(strstr((matcher), pattern)!=NULL){
+					list[++list[0]] = book.id;
+				}
+				free(matcher);
+			}
+			free(pattern);
+			return list;
+			break;
+		default:
+			printf("Invalid Mode. Range 0~2\n");
+			return NULL;
+	}
 }
 
 #endif

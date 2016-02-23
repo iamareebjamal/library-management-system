@@ -56,7 +56,7 @@ void print_book(struct Book *b) {
 
 /* Setters */
 
-int set_password(DB *db, const char* password) {
+int set_password(DB *db, char* password) {
 	if (verify_pass(password)) {
 		strcpy(db->password, password);
 		save(db);
