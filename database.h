@@ -87,16 +87,7 @@ int delete(int value, int* array, int *size) {
 	return 0;
 }
 
-int delete_book(DB *db, struct Book *book){
-	if(book == NULL){
-		printf("Null Pointer Error\n");
-		return 0;
-	}
-	book->title[0] = '\0';
-	book->author[0] = '\0';
-	book->publisher[0] = '\0';
-	return (delete(book->id, db->library.keys, &db->library.book_count) && save(db));
-}
+
 
 /* File Operations */
 

@@ -43,8 +43,6 @@ int main(){
 
 	printf("%s\n", db.password);
 	char* fn = "14peb049";
-
-	//delete_book(&db, find_book(&db, "YUBLGSRC"));
 	
 	/*if(strcmp(db.password, "0000")==0){
 		ask_pass();
