@@ -4,7 +4,7 @@
 #include <string.h>
 #include "textutils.h"
 
-//#define PATH "/sdcard/AppProjects/Algorithm/jni/db.bin"
+//#define PATH "/sdcard/AppProjects/LMS/jni/db.bin"
 #define PATH "db.bin"
 
 struct Book {
