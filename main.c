@@ -22,7 +22,7 @@ void print_books(){
 	int i;
 	for(i = 0; i < db.library.book_count; i++){
 		struct Book b = db.library.books[db.library.keys[i]];
-		printf("%-20s%-20s%-20s\t%d\n", b.title, b.author, b.publisher, b.id);
+		print_book(&b);
 	}
 }
 
@@ -41,7 +41,7 @@ void list_books(){
 	int i;
 	for(i=1;i<=size;i++){
 		struct Book *b = find_by_id(&db, list[i]);
-		printf("%-20s%-20s%-20s\t%d\n", b->title, b->author, b->publisher, b->id);
+		print_book(b);
 	}
 	free(list);
 }
