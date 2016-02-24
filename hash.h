@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include "database.h"
 
-const int TITLE     = 0;
-static int AUTHOR    = 1;
-static int PUBLISHER = 2;
+static const int TITLE     = 0;
+static const int AUTHOR    = 1;
+static const int PUBLISHER = 2;
 
 char* gen_key(char* string){
 	char *key = to_upper(string);
@@ -106,12 +106,12 @@ struct Book* find_book(DB *db, char* title){
 //containing the id of books
 int* search_books(DB *db, char* search, int mode){
 	int i;
-	int *list = calloc(1000, sizeof(int));
+	int *list = (int*) calloc(1000, sizeof(int));
 	char* pattern = to_upper(search);
 	clean(pattern);
 	list[0]=0; //Setting size to 0
 	switch(mode){
-		case 0:
+		case TITLE:
 			for(i=0; i < db->library.book_count; i++){
 				struct Book book = db->library.books[db->library.keys[i]];
 				char* matcher = to_upper(book.title);
@@ -124,7 +124,7 @@ int* search_books(DB *db, char* search, int mode){
 			free(pattern);
 			return list;
 			break;
-		case 1:
+		case AUTHOR:
 			for(i=0; i < db->library.book_count; i++){
 				struct Book book = db->library.books[db->library.keys[i]];
 				char* matcher = to_upper(book.author);
@@ -137,7 +137,7 @@ int* search_books(DB *db, char* search, int mode){
 			free(pattern);
 			return list;
 			break;
-		case 2:
+		case PUBLISHER:
 			for(i=0; i < db->library.book_count; i++){
 				struct Book book = db->library.books[db->library.keys[i]];
 				char* matcher = to_upper(book.publisher);
