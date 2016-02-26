@@ -111,7 +111,7 @@ int* search_books(DB *db, char* search, int mode){
 	clean(pattern);
 	list[0]=0; //Setting size to 0
 	switch(mode){
-		case TITLE:
+		case 0:
 			for(i=0; i < db->library.book_count; i++){
 				struct Book book = db->library.books[db->library.keys[i]];
 				char* matcher = to_upper(book.title);
@@ -124,7 +124,7 @@ int* search_books(DB *db, char* search, int mode){
 			free(pattern);
 			return list;
 			break;
-		case AUTHOR:
+		case 1:
 			for(i=0; i < db->library.book_count; i++){
 				struct Book book = db->library.books[db->library.keys[i]];
 				char* matcher = to_upper(book.author);
@@ -137,7 +137,7 @@ int* search_books(DB *db, char* search, int mode){
 			free(pattern);
 			return list;
 			break;
-		case PUBLISHER:
+		case 2:
 			for(i=0; i < db->library.book_count; i++){
 				struct Book book = db->library.books[db->library.keys[i]];
 				char* matcher = to_upper(book.publisher);

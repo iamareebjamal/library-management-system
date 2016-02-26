@@ -103,8 +103,8 @@ int init(DB* db) {
 	printf("Creating new Database...\n");
 	char* pass = "0000";
 	printf("Values Initialised...\n");
-	db->transactions.issue_count = 0;
-	db->transactions.return_count = 0;
+	db->manager.issue_count = 0;
+	db->manager.return_count = 0;
 	db->library.book_count = 0;
 	strcpy(db->password, pass);
 	return save(db);
