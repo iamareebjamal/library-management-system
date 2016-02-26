@@ -22,24 +22,20 @@ struct Library {
 };
 
 struct Transactions {
-	struct Issues {
 		char fac_no[8];
 		int date;
 		int book_id;
-	} issues[1000];
+};
 
-	struct Returns {
-		char fac_no[8];
-		int date;
-		int book_id;
-	} returns[1000];
-
+struct Manager {
+	struct Transactions issues[1000];
+	struct Transactions returns[1000];
 	int issue_count;
 	int return_count;
 };
 
 typedef struct DB {
-	struct Transactions transactions;
+	struct Manager manager;
 	struct Library library;
 	char password[15];
 } DB;
