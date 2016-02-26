@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "database.h"
 
+
 void print_books(DB *db){
 	//Print all the entered books
 	int i;
@@ -13,7 +14,10 @@ void print_books(DB *db){
 	}
 }
 
-/*int user_input(){
+void clear_screen(){
+	system ("tput clear");
+}
+int user_input(){
 	int i;
 	printf("What u Want To do ?\n1: Issue\n2: Return");
 	scanf("%d", &i);
@@ -24,8 +28,11 @@ void print_books(DB *db){
 		user_input();
 	}
 }
-int select_book(DB *db){
-	print_books(&db)
+
+/*int select_book(DB *db){
+	clear_screen();
+	print_books(db);
+
 
 }*/
 #endif

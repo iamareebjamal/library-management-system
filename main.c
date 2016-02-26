@@ -71,6 +71,7 @@ int main(){
 	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	printf("\nPattern Match\t%d\n", verify_fn(fn));
+	select_book(&db);
 
 	//int i = user_input();
 	return 0;
