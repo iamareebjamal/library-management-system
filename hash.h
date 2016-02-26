@@ -36,15 +36,13 @@ int key_in_table(int key, struct Library *library){
 
 int insert_in_hash( DB *db, struct Book *book, unsigned long hash){
 	int offset = hash%997;
-	printf("%lu\n", hash);
 	//Check if the address is pre-occupied
 	if(key_in_table(offset, &db->library)==-1){
 		book->id = offset;
 		struct Library *lib = &db->library;
 		int *index = &(lib->book_count);
-		lib->keys[*index] = offset;
+		lib->keys[(*index)++] = offset;
 		lib->books[offset] = *book;
-		(*index)++;
 		printf("Book entered\n");
 		printf("Offset : %d\n", offset);
 		save(db);
@@ -81,6 +79,7 @@ struct Book* find_by_id(DB *db, int id){
 }
 
 /* Find a book by its exact title */
+// To Do: match by clean
 struct Book* find_book(DB *db, char* title){
 	unsigned long key = gen_hash(gen_key(title));
 	
@@ -104,6 +103,7 @@ struct Book* find_book(DB *db, char* title){
 
 //Fuzzy Search of Books by title, author or publisher. Returns an integer array 
 //containing the id of books
+//To Do: Reorganize Similar Code
 int* search_books(DB *db, char* search, int mode){
 	int i;
 	int *list = (int*) calloc(1000, sizeof(int));

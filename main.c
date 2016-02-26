@@ -37,8 +37,8 @@ void print_test(int* a, int size){
 void list_books(){
 	int *list = search_books(&db, "J.K", AUTHOR);
 	int size = *list;
-	printf("%d\n", size);
 	int i;
+	printf("%d\n", size);
 	for(i=1;i<=size;i++){
 		struct Book *b = find_by_id(&db, list[i]);
 		print_book(b);
@@ -66,7 +66,7 @@ int main(){
 	struct Book *found = find_book(&db, "MKAWER");
 	if(found!=NULL)
 		printf("id %s\n", found->title);*/
-	struct Book book = {"Introduction to Physics", "DC Pandey", "Bloomsbury", 0, 20};
+	struct Book book = {"Introduction to Chemistry", "DC Pandey", "Bloomsbury", 0, 20};
 	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	printf("\nPattern Match\t%d\n", verify_fn(fn));
