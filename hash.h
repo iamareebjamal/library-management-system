@@ -109,7 +109,6 @@ int* search_books(DB *db, char* search, int mode){
 	int *list = (int*) calloc(1000, sizeof(int));
 	char* pattern = to_upper(search);
 	clean(pattern);
-	list[0]=0; //Setting size to 0
 	switch(mode){
 		case 0:
 			for(i=0; i < db->library.book_count; i++){
