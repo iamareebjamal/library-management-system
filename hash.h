@@ -36,15 +36,13 @@ int key_in_table(int key, struct Library *library){
 
 int insert_in_hash( DB *db, struct Book *book, unsigned long hash){
 	int offset = hash%997;
-	printf("%lu\n", hash);
 	//Check if the address is pre-occupied
 	if(key_in_table(offset, &db->library)==-1){
 		book->id = offset;
 		struct Library *lib = &db->library;
 		int *index = &(lib->book_count);
-		lib->keys[*index] = offset;
+		lib->keys[(*index)++] = offset;
 		lib->books[offset] = *book;
-		(*index)++;
 		printf("Book entered\n");
 		printf("Offset : %d\n", offset);
 		save(db);
@@ -81,6 +79,7 @@ struct Book* find_by_id(DB *db, int id){
 }
 
 /* Find a book by its exact title */
+// To Do: match by clean
 struct Book* find_book(DB *db, char* title){
 	unsigned long key = gen_hash(gen_key(title));
 	
@@ -104,14 +103,14 @@ struct Book* find_book(DB *db, char* title){
 
 //Fuzzy Search of Books by title, author or publisher. Returns an integer array 
 //containing the id of books
+//To Do: Reorganize Similar Code
 int* search_books(DB *db, char* search, int mode){
 	int i;
 	int *list = (int*) calloc(1000, sizeof(int));
 	char* pattern = to_upper(search);
 	clean(pattern);
-	list[0]=0; //Setting size to 0
 	switch(mode){
-		case TITLE:
+		case 0:
 			for(i=0; i < db->library.book_count; i++){
 				struct Book book = db->library.books[db->library.keys[i]];
 				char* matcher = to_upper(book.title);
@@ -124,7 +123,7 @@ int* search_books(DB *db, char* search, int mode){
 			free(pattern);
 			return list;
 			break;
-		case AUTHOR:
+		case 1:
 			for(i=0; i < db->library.book_count; i++){
 				struct Book book = db->library.books[db->library.keys[i]];
 				char* matcher = to_upper(book.author);
@@ -137,7 +136,7 @@ int* search_books(DB *db, char* search, int mode){
 			free(pattern);
 			return list;
 			break;
-		case PUBLISHER:
+		case 2:
 			for(i=0; i < db->library.book_count; i++){
 				struct Book book = db->library.books[db->library.keys[i]];
 				char* matcher = to_upper(book.publisher);

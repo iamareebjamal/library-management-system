@@ -6,7 +6,7 @@ DB  db;
 void ask_pass(){
 	char password[15];
 	printf("Please enter new password : ");
-	scanf("%s", password);
+	fgets(password, 15, stdin);
 	while(!set_password(&db, password)){
 		printf("\nPassword is of invalid format."\
 		"\nPlease enter a valid password of length"\
@@ -37,8 +37,8 @@ void print_test(int* a, int size){
 void list_books(){
 	int *list = search_books(&db, "J.K", AUTHOR);
 	int size = *list;
-	printf("%d\n", size);
 	int i;
+	printf("%d\n", size);
 	for(i=1;i<=size;i++){
 		struct Book *b = find_by_id(&db, list[i]);
 		print_book(b);
@@ -47,7 +47,6 @@ void list_books(){
 }
 
 int main(){
-	int i = 0;
 	if(load(&db)==0){
 		printf("Database load failed. Terminating");
 		return 0;
@@ -67,8 +66,8 @@ int main(){
 	struct Book *found = find_book(&db, "MKAWER");
 	if(found!=NULL)
 		printf("id %s\n", found->title);*/
-	struct Book book = {"Harry Potter", "J.K. Rowling", "Bloomsbury", 0, 20};
-	//printf("%d\n", add_book(&db, &book));
+	struct Book book = {"Introduction to Chemistry", "DC Pandey", "Bloomsbury", 0, 20};
+	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	printf("\nPattern Match\t%d\n", verify_fn(fn));
 	
