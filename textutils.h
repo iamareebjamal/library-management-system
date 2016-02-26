@@ -48,7 +48,7 @@ int verify_fn(char* fn){
 
 int verify_pass(char* pass){
 	int n = len(pass);
-	if(n>=8&&n<=16){
+	if(n>=8&&n<16){
 		while(*++pass){
 			if(*pass==' '||*pass=='\t')
 				return 0;
