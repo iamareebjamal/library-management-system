@@ -58,13 +58,6 @@ int verify_pass(char* pass){
 	return 0;
 }
 
-void safe_copy(char* to, char* from, size_t len){
-	while(len--){
-		*to++ = *from++;
-	}
-	*to = '\0';
-}
-
 void clean(char* s){
 	int i,j=0;
 	for(i=0; i<len(s); i++){
