@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "hash.h"
+#include "transact.h"
 
 DB  db;
 
@@ -17,14 +18,14 @@ void ask_pass(){
 	}
 }
 
-void print_books(){
+/*void print_books(){
 	//Print all the entered books
 	int i;
 	for(i = 0; i < db.library.book_count; i++){
 		struct Book b = db.library.books[db.library.keys[i]];
 		print_book(&b);
 	}
-}
+}*/
 
 void print_test(int* a, int size){
 	int i = 0;
@@ -58,7 +59,7 @@ int main(){
 	/*if(strcmp(db.password, "0000")==0){
 		ask_pass();
 	}*/
-	print_books();
+	print_books(&db);
 	printf("\n\n\n");
 	list_books();
 
@@ -70,6 +71,7 @@ int main(){
 	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	printf("\nPattern Match\t%d\n", verify_fn(fn));
-	
+
+	//int i = user_input();
 	return 0;
 }
