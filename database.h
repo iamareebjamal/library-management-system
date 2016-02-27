@@ -70,7 +70,7 @@ int set_password(DB *db, char* password) {
 	return 0;
 }
 
-int delete(int value, int* array, int *size) {
+int delete_value(int value, int* array, int *size) {
 	int i = 0, shift = 0;
 	for (i = 0; i < *size; i++) {
 		if (array[i] == value) {

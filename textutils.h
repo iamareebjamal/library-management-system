@@ -1,7 +1,6 @@
 #ifndef TEXTUTILS_H
 #define TEXTUTILS_H
 
-#include <regex.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -28,20 +27,9 @@ char* to_upper(const char* s){
 int verify_fn(char* fn){
 	int n = len(fn);
 	if(n==8){
-		fn = to_upper(fn);
-		regex_t regex;
-		char* pattern = \
-		"[0-1][0-9][PCLEM]"\
-		"[EK][B][0-9][0-9][0-9]";
-		int reti = regcomp(&regex, pattern, 0);
-		if(reti) {
-			printf("Regex couldn't compile");
-			return 0;
-		}
-		reti = regexec(&regex, fn, 0, NULL, 0);
-		free(fn);
-		regfree(&regex);
-		return !reti;
+		//Not supported in windows. Change to cross
+		//compilant code
+		return 1;
 	}
 	
 	return 0;
