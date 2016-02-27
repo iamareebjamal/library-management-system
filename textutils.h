@@ -49,23 +49,14 @@ int verify_fn(char* fn){
 
 int verify_pass(char* pass){
 	int n = len(pass);
-	pass = to_upper(pass);
-	if(n>=8&&n<=16){
+	if(n>=8&&n<16){
 		while(*++pass){
 			if(*pass==' '||*pass=='\t')
 				return 0;
 		}
 		return 1;
 	}
-	free(pass);
 	return 0;
-}
-
-void safe_copy(char* to, char* from, size_t len){
-	while(len--){
-		*to++ = *from++;
-	}
-	*to = '\0';
 }
 
 void clean(char* s){
@@ -77,15 +68,6 @@ void clean(char* s){
 		}
 	}
 	s[j]='\0';
-}
-
-char* combine(char* t, char* a, char* p){
-	int length = len(t)+len(a)+len(p)+1;
-	char *result = (char*) malloc(length*sizeof(char));
-	
-	snprintf(result, length, "%s%s%s", t, a, p);
-	
-	return result;
 }
 
 #endif

@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include "database.h"
 
-const int TITLE     = 0;
-static int AUTHOR    = 1;
-static int PUBLISHER = 2;
+static const int TITLE     = 0;
+static const int AUTHOR    = 1;
+static const int PUBLISHER = 2;
 
 char* gen_key(char* string){
 	char *key = to_upper(string);
@@ -36,15 +36,13 @@ int key_in_table(int key, struct Library *library){
 
 int insert_in_hash( DB *db, struct Book *book, unsigned long hash){
 	int offset = hash%997;
-	printf("%lu\n", hash);
 	//Check if the address is pre-occupied
 	if(key_in_table(offset, &db->library)==-1){
 		book->id = offset;
 		struct Library *lib = &db->library;
 		int *index = &(lib->book_count);
-		lib->keys[*index] = offset;
+		lib->keys[(*index)++] = offset;
 		lib->books[offset] = *book;
-		(*index)++;
 		printf("Book entered\n");
 		printf("Offset : %d\n", offset);
 		save(db);
@@ -81,6 +79,7 @@ struct Book* find_by_id(DB *db, int id){
 }
 
 /* Find a book by its exact title */
+// To Do: match by clean
 struct Book* find_book(DB *db, char* title){
 	unsigned long key = gen_hash(gen_key(title));
 	
@@ -104,12 +103,12 @@ struct Book* find_book(DB *db, char* title){
 
 //Fuzzy Search of Books by title, author or publisher. Returns an integer array 
 //containing the id of books
+//To Do: Reorganize Similar Code
 int* search_books(DB *db, char* search, int mode){
 	int i;
-	int *list = calloc(1000, sizeof(int));
+	int *list = (int*) calloc(1000, sizeof(int));
 	char* pattern = to_upper(search);
 	clean(pattern);
-	list[0]=0; //Setting size to 0
 	switch(mode){
 		case 0:
 			for(i=0; i < db->library.book_count; i++){

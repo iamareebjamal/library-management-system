@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include "hash.h"
+#include "transact.h"
 
 DB  db;
 
 void ask_pass(){
 	char password[15];
 	printf("Please enter new password : ");
-	scanf("%s", password);
+	fgets(password, 15, stdin);
 	while(!set_password(&db, password)){
 		printf("\nPassword is of invalid format."\
 		"\nPlease enter a valid password of length"\
@@ -17,14 +18,14 @@ void ask_pass(){
 	}
 }
 
-void print_books(){
+/*void print_books(){
 	//Print all the entered books
 	int i;
 	for(i = 0; i < db.library.book_count; i++){
 		struct Book b = db.library.books[db.library.keys[i]];
-		printf("%-20s%-20s%-20s\t%d\n", b.title, b.author, b.publisher, b.id);
+		print_book(&b);
 	}
-}
+}*/
 
 void print_test(int* a, int size){
 	int i = 0;
@@ -37,8 +38,8 @@ void print_test(int* a, int size){
 void list_books(){
 	int *list = search_books(&db, "Ha", TITLE);
 	int size = *list;
-	printf("%d\n", size);
 	int i;
+	printf("%d\n", size);
 	for(i=1;i<=size;i++){
 		struct Book *b = find_by_id(&db, list[i]);
 		print_book(b);
@@ -47,7 +48,6 @@ void list_books(){
 }
 
 int main(){
-	int i = 0;
 	if(load(&db)==0){
 		printf("Database load failed. Terminating");
 		return 0;
@@ -59,7 +59,7 @@ int main(){
 	/*if(strcmp(db.password, "0000")==0){
 		ask_pass();
 	}*/
-	print_books();
+	print_books(&db);
 	printf("\n\n\n");
 	list_books();
 
@@ -67,10 +67,12 @@ int main(){
 	struct Book *found = find_book(&db, "MKAWER");
 	if(found!=NULL)
 		printf("id %s\n", found->title);*/
-	struct Book book = {"Harry Potter", "J.K. Rowling", "Bloomsbury", 0, 20};
-	//printf("%d\n", add_book(&db, &book));
+	struct Book book = {"Introduction to Chemistry", "DC Pandey", "Bloomsbury", 0, 20};
+	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	printf("\nPattern Match\t%d\n", verify_fn(fn));
-	
+	select_book(&db);
+
+	//int i = user_input();
 	return 0;
 }
