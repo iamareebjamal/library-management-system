@@ -14,6 +14,7 @@ size_t len(const char* str){
 	return len;
 }
 
+//Fix increment
 char* to_upper(const char* s){
 	char* up = strdup(s);
 	char* to = up;

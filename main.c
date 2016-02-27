@@ -35,13 +35,13 @@ void print_test(int* a, int size){
 }
 
 void list_books(){
-	int *list = search_books(&db, "J.K", AUTHOR);
+	int *list = search_books(&db, "Ha", TITLE);
 	int size = *list;
 	printf("%d\n", size);
 	int i;
 	for(i=1;i<=size;i++){
 		struct Book *b = find_by_id(&db, list[i]);
-		printf("%-20s%-20s%-20s\t%d\n", b->title, b->author, b->publisher, b->id);
+		print_book(b);
 	}
 	free(list);
 }
