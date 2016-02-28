@@ -46,7 +46,9 @@ int main(){
 
 	printf("%s\n", db.password);
 	char* fn = "14peb049";
-	char *s = "as";
+	char *year = "13";
+	char *serial ="1111";
+
 	
 	/*if(strcmp(db.password, "0000")==0){
 		ask_pass();
@@ -63,7 +65,8 @@ int main(){
 	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	//printf("\nPattern Match\t%d\n", verify_fn(fn));
-	printf("%d",is_fac_year(s));
+	printf("%d\n",is_fac_year(year));
+	printf("%d\n",is_serial_number(serial));
 	//int i = user_input();
 	return 0;
 }

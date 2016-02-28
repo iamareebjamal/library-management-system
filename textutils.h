@@ -6,36 +6,36 @@
 #include <stdio.h>
 #include <malloc.h>
 
-size_t len(const char* str){
+size_t len(const char* str) {
 	int len = 0;
-	while(*str++)
+	while (*str++)
 		len++;
 	return len;
 }
 
 //Fix increment
-char* to_upper(const char* s){
+char* to_upper(const char* s) {
 	char* up = strdup(s);
 	char* to = up;
-	while(*to){
-		*to=toupper(*to);
+	while (*to) {
+		*to = toupper(*to);
 		to++;
 	}
 	return up;
 }
 
-int is_fac_year(char *year){
-	if ((year[0] >= '0' && year[0] <= '1') && (year[1]>='0' && year[1]<= '9') && len(year) == 2){
+int is_fac_year(char *year) {
+	if ((year[0] >= '0' && year[0] <= '1') && (year[1] >= '0' && year[1] <= '9') && len(year) == 2) {
 		return 1;
-	}else 
-	return 0;
-} 
+	} else
+		return 0;
+}
 
-int is_fac_branch(char *branch){
-	const char *br[6] = {"MEB","PEB","KEB","LEB","EEB","PKB"};
+int is_fac_branch(char *branch) {
+	const char *br[6] = {"MEB", "PEB", "KEB", "LEB", "EEB", "PKB"};
 	int i = 0;
-	for (i; i<=5; i++){
-		if (strcmp(br[i],branch) == 0){
+	for (i; i <= 5; i++) {
+		if (strcmp(br[i], branch) == 0) {
 			printf("string matched\n");
 			return 1;
 		}
@@ -45,24 +45,36 @@ int is_fac_branch(char *branch){
 	return 0;
 }
 
+int is_serial_number(char *serial) {
+	int i = 0;
 
-int verify_fn(char* fn){
+	if (len(serial) != 3)
+		return 0;
+	for (i; i<=2; i++){
+		if(!(serial[i] >= '0' && serial[i] <= '9'))
+			return 0;
+	}
+	return 1;
+	
+}
+
+int verify_fn(char* fn) {
 	int n = len(fn);
-	if(n==8){
+	if (n == 8) {
 
 		//Not supported in windows. Change to cross
 		//compilant code
 		return 1;
 	}
-	
+
 	return 0;
 }
 
-int verify_pass(char* pass){
+int verify_pass(char* pass) {
 	int n = len(pass);
-	if(n>=8&&n<16){
-		while(*++pass){
-			if(*pass==' '||*pass=='\t')
+	if (n >= 8 && n < 16) {
+		while (*++pass) {
+			if (*pass == ' ' || *pass == '\t')
 				return 0;
 		}
 		return 1;
@@ -70,15 +82,15 @@ int verify_pass(char* pass){
 	return 0;
 }
 
-void clean(char* s){
-	int i,j=0;
-	for(i=0; i<len(s); i++){
+void clean(char* s) {
+	int i, j = 0;
+	for (i = 0; i < len(s); i++) {
 		char c = s[i];
-		if((c>='A'&&c<='Z')||(c>='0'&&c<='9')){
+		if ((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
 			s[j++] = c;
 		}
 	}
-	s[j]='\0';
+	s[j] = '\0';
 }
 
 #endif
