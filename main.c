@@ -46,6 +46,7 @@ int main(){
 
 	printf("%s\n", db.password);
 	char* fn = "14peb049";
+	char *s = "14";
 	
 	/*if(strcmp(db.password, "0000")==0){
 		ask_pass();
@@ -61,8 +62,8 @@ int main(){
 	struct Book book = {"Introduction to Chemistry", "DC Pandey", "Bloomsbury", 0, 20};
 	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
-	printf("\nPattern Match\t%d\n", verify_fn(fn));
-
+	//printf("\nPattern Match\t%d\n", verify_fn(fn));
+	printf("%d",is_fac_year(s));
 	//int i = user_input();
 	return 0;
 }

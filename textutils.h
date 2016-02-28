@@ -24,9 +24,32 @@ char* to_upper(const char* s){
 	return up;
 }
 
+int is_fac_year(char *year){
+	if (year[0] >= '0' && year[1]<= '9' && len(year) == 2){
+		return 1;
+	}else 
+	return 0;
+} 
+
+int is_fac_branch(char *branch){
+	const char *br[6] = {"MEB","PEB","KEB","LEB","EEB","PKB"};
+	int i = 0;
+	for (i; i<=5; i++){
+		if (strcmp(br[i],branch) == 0){
+			printf("string matched\n");
+			return 1;
+		}
+		//printf("%s\n",br[i] );
+
+	}
+	return 0;
+}
+ 
+
 int verify_fn(char* fn){
 	int n = len(fn);
 	if(n==8){
+
 		//Not supported in windows. Change to cross
 		//compilant code
 		return 1;
