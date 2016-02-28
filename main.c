@@ -67,6 +67,7 @@ int main(){
 	//printf("\nPattern Match\t%d\n", verify_fn(fn));
 	printf("%d\n",is_fac_year(year));
 	printf("%d\n",is_serial_number(serial));
+	printf("%d\n",verify_fn(to_upper(fn)));
 	//int i = user_input();
 	return 0;
 }

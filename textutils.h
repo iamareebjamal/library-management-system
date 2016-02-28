@@ -36,7 +36,6 @@ int is_fac_branch(char *branch) {
 	int i = 0;
 	for (i; i <= 5; i++) {
 		if (strcmp(br[i], branch) == 0) {
-			printf("string matched\n");
 			return 1;
 		}
 		//printf("%s\n",br[i] );
@@ -50,21 +49,29 @@ int is_serial_number(char *serial) {
 
 	if (len(serial) != 3)
 		return 0;
-	for (i; i<=2; i++){
-		if(!(serial[i] >= '0' && serial[i] <= '9'))
+	for (i; i <= 2; i++) {
+		if (!(serial[i] >= '0' && serial[i] <= '9'))
 			return 0;
 	}
 	return 1;
-	
+
 }
 
 int verify_fn(char* fn) {
+	//Not supported in windows. Change to cross
+	//compilant code
+	char year[2], branch[3], serial[3];
+
 	int n = len(fn);
 	if (n == 8) {
 
-		//Not supported in windows. Change to cross
-		//compilant code
-		return 1;
+		strncpy(year, fn, 2); year[2] = 0;
+		strncpy(branch, &fn[2], 3); branch[3] = 0;
+		strncpy(serial, &fn[5], 3); serial[3] = 0;
+
+		if (is_fac_year(year) && is_fac_branch(branch) && is_serial_number(serial)){
+			return 1;
+		}
 	}
 
 	return 0;
