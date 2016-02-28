@@ -25,7 +25,7 @@ char* to_upper(const char* s){
 }
 
 int is_fac_year(char *year){
-	if (year[0] >= '0' && year[1]<= '9' && len(year) == 2){
+	if ((year[0] >= '0' && year[0] <= '1') && (year[1]>='0' && year[1]<= '9') && len(year) == 2){
 		return 1;
 	}else 
 	return 0;
@@ -44,7 +44,7 @@ int is_fac_branch(char *branch){
 	}
 	return 0;
 }
- 
+
 
 int verify_fn(char* fn){
 	int n = len(fn);

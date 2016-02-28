@@ -46,7 +46,7 @@ int main(){
 
 	printf("%s\n", db.password);
 	char* fn = "14peb049";
-	char *s = "14";
+	char *s = "as";
 	
 	/*if(strcmp(db.password, "0000")==0){
 		ask_pass();
