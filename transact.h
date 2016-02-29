@@ -4,15 +4,28 @@
 #include <stdio.h>
 #include "database.h"
 #include "hash.h"
+#include <time.h>
+
+void print_date(time_t t){
+	
+	printf("%s",ctime(&t));
+}
+
+time_t get_current_date() {
+	time_t t = time(0);
+	struct tm *tm = localtime(&t);
+	t = mktime(tm);
+	return t;
+}
 
 int is_already_issued(DB *db, int id, char *fac) {
 	int i, flag = 0;
+	
 	for (i = 0; i < db->manager.issue_count; i++) {
 		if (strcmp(db->manager.issues[i].fac_no, fac) == 0 && (db->manager.issues[i].book_id == id)) {
 			printf("\nBOOK already issued to this faculty number :\t%s\n", fac);
 			return 1;
 		}
-
 	}
 	return 0;
 }
@@ -27,12 +40,14 @@ void issue_book(DB *db, int id, char* fac) {
 		struct Transactions *transact = &(db->manager.issues[(*issue_count)++]);
 		strcpy(transact->fac_no , fno);
 		transact->book_id = id;
-		transact->date = 0000;	// change date
+		transact->date = get_current_date();	// change date
 		b->stock -= 1;
-		save(db);
+
+		//save(db);
 	} else {
 		printf("\nErrors Transacting the book");
 	}
+	
 
 }
 #endif

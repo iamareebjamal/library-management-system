@@ -76,6 +76,9 @@ int main() {
 	issue_book(&db, 273, f);
 	printf("\nstock :%d\n", db.library.books[273].stock);
 	printf("\nissue_count: %d\n", db.manager.issue_count);
+
+
+	print_date(get_current_date());
 	//int i = user_input();
 	return 0;
 }
