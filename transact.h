@@ -43,7 +43,7 @@ void issue_book(DB *db, int id, char* fac) {
 		transact->date = get_current_date();	// change date
 		b->stock -= 1;
 
-		//save(db);
+		save(db);
 	} else {
 		printf("\nErrors Transacting the book");
 	}
