@@ -46,7 +46,7 @@ int main() {
 
 	printf("%s\n", db.password);
 	char* fn = "13peb049";
-	char* f ="14peb250";
+	char* f ="14peb049";
 	char *year = "13";
 	char *serial = "1111";
 
@@ -66,16 +66,16 @@ int main() {
 	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	//printf("\nPattern Match\t%d\n", verify_fn(fn));
-	printf("%d\n", is_fac_year(year));
+	/*printf("%d\n", is_fac_year(year));
 	printf("%d\n", is_serial_number(serial));
-	printf("%d\n", verify_fn(fn));
+	printf("%d\n", verify_fn(fn));*/
 
-	printf("%d", is_already_issued(&db,273,fn));
+	printf("%d\n", is_already_issued(&db,273,fn));
 	issue_book(&db, 273, fn);
-	printf("%d", is_already_issued(&db,273,f));
+	printf("%d\n", is_already_issued(&db,273,f));
 	issue_book(&db, 273, f);
-	printf("%d", db.library.books[273].stock);
-	printf("%d", db.manager.issue_count);
+	printf("\nstock :%d\n", db.library.books[273].stock);
+	printf("\nissue_count: %d\n", db.manager.issue_count);
 	//int i = user_input();
 	return 0;
 }
