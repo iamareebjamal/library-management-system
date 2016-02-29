@@ -4,42 +4,42 @@
 
 DB  db;
 
-void ask_pass(){
+void ask_pass() {
 	char password[15];
 	printf("Please enter new password : ");
 	fgets(password, 15, stdin);
-	while(!set_password(&db, password)){
+	while (!set_password(&db, password)) {
 		printf("\nPassword is of invalid format."\
-		"\nPlease enter a valid password of length"\
-		" between 8 and 15 characters with no spaces"\
-		"\nYou can type \'^cancel\' to cancel the password modification.\n\n");
+		       "\nPlease enter a valid password of length"\
+		       " between 8 and 15 characters with no spaces"\
+		       "\nYou can type \'^cancel\' to cancel the password modification.\n\n");
 		fgets(password, 15, stdin);
-		if(strcmp(password, "^cancel")==0)return;
+		if (strcmp(password, "^cancel") == 0)return;
 	}
 }
 
-void print_test(int* a, int size){
+void print_test(int* a, int size) {
 	int i = 0;
-	for(i = 0; i < size; i++){
+	for (i = 0; i < size; i++) {
 		printf("%d  ", a[i]);
 	}
 	printf("\n");
 }
 
-void list_books(){
+void list_books() {
 	int *list = search_books(&db, "Ha", TITLE);
 	int size = *list;
 	int i;
 	printf("%d\n", size);
-	for(i=1;i<=size;i++){
+	for (i = 1; i <= size; i++) {
 		struct Book *b = find_by_id(&db, list[i]);
 		print_book(b);
 	}
 	free(list);
 }
 
-int main(){
-	if(load(&db)==0){
+int main() {
+	if (load(&db) == 0) {
 		printf("Database load failed. Terminating");
 		return 0;
 	}
@@ -47,9 +47,9 @@ int main(){
 	printf("%s\n", db.password);
 	char* fn = "14peb049";
 	char *year = "13";
-	char *serial ="1111";
+	char *serial = "1111";
 
-	
+
 	/*if(strcmp(db.password, "0000")==0){
 		ask_pass();
 	}*/
@@ -65,9 +65,9 @@ int main(){
 	printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 	//printf("\nPattern Match\t%d\n", verify_fn(fn));
-	printf("%d\n",is_fac_year(year));
-	printf("%d\n",is_serial_number(serial));
-	printf("%d\n",verify_fn(to_upper(fn)));
+	printf("%d\n", is_fac_year(year));
+	printf("%d\n", is_serial_number(serial));
+	printf("%d\n", verify_fn(fn));
 	//int i = user_input();
 	return 0;
 }

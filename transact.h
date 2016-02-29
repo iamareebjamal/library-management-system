@@ -26,4 +26,8 @@ int user_input(){
 	}
 }
 
+struct Book* get_book(int id){
+	
+}
+
 #endif

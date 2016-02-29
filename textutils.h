@@ -25,21 +25,15 @@ char* to_upper(const char* s) {
 }
 
 int is_fac_year(char *year) {
-	if ((year[0] >= '0' && year[0] <= '1') && (year[1] >= '0' && year[1] <= '9') && len(year) == 2) {
-		return 1;
-	} else
-		return 0;
+	return ((year[0] >= '0' && year[0] <= '1') && (year[1] >= '0' && year[1] <= '9') && len(year) == 2);
 }
 
 int is_fac_branch(char *branch) {
-	const char *br[6] = {"MEB", "PEB", "KEB", "LEB", "EEB", "PKB"};
-	int i = 0;
-	for (i; i <= 5; i++) {
-		if (strcmp(br[i], branch) == 0) {
+	const char *br[] = {"MEB", "PEB", "KEB", "LEB", "EEB", "PKB", "CEB"};
+	int i;
+	for (i = 0; i < 7; i++) {
+		if (strcmp(br[i], branch) == 0) 
 			return 1;
-		}
-		//printf("%s\n",br[i] );
-
 	}
 	return 0;
 }
@@ -49,6 +43,7 @@ int is_serial_number(char *serial) {
 
 	if (len(serial) != 3)
 		return 0;
+
 	for (i; i <= 2; i++) {
 		if (!(serial[i] >= '0' && serial[i] <= '9'))
 			return 0;
@@ -57,23 +52,23 @@ int is_serial_number(char *serial) {
 
 }
 
-int verify_fn(char* fn) {
-	//Not supported in windows. Change to cross
-	//compilant code
+int verify_fn(char* fac_no) {
+	char* fn = to_upper(fac_no);
 	char year[2], branch[3], serial[3];
 
 	int n = len(fn);
 	if (n == 8) {
-
-		strncpy(year, fn, 2); year[2] = 0;
-		strncpy(branch, &fn[2], 3); branch[3] = 0;
-		strncpy(serial, &fn[5], 3); serial[3] = 0;
+		//Generating Substrings
+		strncpy(year, fn, 2); year[2] = '\0';
+		strncpy(branch, &fn[2], 3); branch[3] = '\0';
+		strncpy(serial, &fn[5], 3); serial[3] = '\0';
 
 		if (is_fac_year(year) && is_fac_branch(branch) && is_serial_number(serial)){
+			free(fn);
 			return 1;
 		}
 	}
-
+	free(fn);
 	return 0;
 }
 
