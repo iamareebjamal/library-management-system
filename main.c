@@ -68,6 +68,9 @@ int main() {
 	printf("%d\n", is_fac_year(year));
 	printf("%d\n", is_serial_number(serial));
 	printf("%d\n", verify_fn(fn));
+
+	printf("%d", is_already_issued(&db,273,fn));
+	issue_book(&db, 273, fn);
 	//int i = user_input();
 	return 0;
 }
