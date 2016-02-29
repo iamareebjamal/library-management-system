@@ -45,7 +45,8 @@ int main() {
 	}
 
 	printf("%s\n", db.password);
-	char* fn = "14peb049";
+	char* fn = "13peb049";
+	char* f ="14peb250";
 	char *year = "13";
 	char *serial = "1111";
 
@@ -71,6 +72,10 @@ int main() {
 
 	printf("%d", is_already_issued(&db,273,fn));
 	issue_book(&db, 273, fn);
+	printf("%d", is_already_issued(&db,273,f));
+	issue_book(&db, 273, f);
+	printf("%d", db.library.books[273].stock);
+	printf("%d", db.manager.issue_count);
 	//int i = user_input();
 	return 0;
 }
