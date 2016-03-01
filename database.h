@@ -23,7 +23,7 @@ struct Library {
 };
 
 struct Transactions {
-		char fac_no[8];
+		char fac_no[9];  //1 more for null
 		time_t date;
 		int book_id;
 };

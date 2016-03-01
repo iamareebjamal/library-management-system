@@ -18,12 +18,12 @@ void ask_pass() {
 	}
 }
 
-void print_test(int* a, int size) {
-	int i = 0;
-	for (i = 0; i < size; i++) {
-		printf("%d  ", a[i]);
-	}
-	printf("\n");
+void test_upper(char *s, char *z){
+
+	char *u = to_upper(s);
+	strcpy(z,u);
+	printf("%s: %s\n",u, z);
+	free (u);
 }
 
 void list_books() {
@@ -38,7 +38,31 @@ void list_books() {
 	free(list);
 }
 
+void add_b(){
+	struct Book b;
+	char title[40],author[40],pub[40];
+	int count;
+	printf("enter title\n");
+	scanf("%s",title);
+	printf("enter author\n");
+	scanf("%s",author);
+	printf("enter pub\n");
+	scanf("%s",pub);
+
+	printf("enter stock\n");
+	scanf("%d",&count);
+
+	strcpy(b.title ,title);
+	strcpy(b.author,author);
+	strcpy(b.publisher, pub);
+	b.stock= count;
+	add_book(&db, &b);
+
+}
+
 int main() {
+	int i;
+	char pass[15];
 	if (load(&db) == 0) {
 		printf("Database load failed. Terminating");
 		return 0;
@@ -46,39 +70,31 @@ int main() {
 
 	printf("%s\n", db.password);
 	char* fn = "13peb049";
-	char* f ="14peb049";
-	char *year = "13";
-	char *serial = "1111";
-
+	char* f = "14peb049";
 
 	/*if(strcmp(db.password, "0000")==0){
 		ask_pass();
 	}*/
+
 	print_books(&db);
 	printf("\n\n\n");
 	list_books();
+	for (i = 0; i<db.manager.issue_count;i++){
+		printf("here:%s\n",db.manager.issues[i].fac_no);
+	}
 
-	/*
-	struct Book *found = find_book(&db, "MKAWER");
-	if(found!=NULL)
-		printf("id %s\n", found->title);*/
-	struct Book book = {"Introduction to Chemistry", "DC Pandey", "Bloomsbury", 0, 20};
-	printf("%d\n", add_book(&db, &book));
+
+	//add_b();
+	//struct Book book = {"ASasdwaaw", "George RR Martin", "U/K", 0, 40};
+	//printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
-	//printf("\nPattern Match\t%d\n", verify_fn(fn));
-	/*printf("%d\n", is_fac_year(year));
-	printf("%d\n", is_serial_number(serial));
-	printf("%d\n", verify_fn(fn));*/
 
-	printf("%d\n", is_already_issued(&db,273,fn));
-	issue_book(&db, 273, fn);
-	printf("%d\n", is_already_issued(&db,273,f));
-	issue_book(&db, 273, f);
-	printf("\nstock :%d\n", db.library.books[273].stock);
+	issue_book(&db, 396, fn);
+	//printf("%d\n", is_already_issued(&db, 273, fn));
+
+	printf("\nstock :%d\n", db.library.books[396].stock);
 	printf("\nissue_count: %d\n", db.manager.issue_count);
 
-
-	print_date(get_current_date());
-	//int i = user_input();
 	return 0;
+
 }
