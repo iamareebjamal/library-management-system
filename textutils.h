@@ -15,12 +15,14 @@ size_t len(const char* str) {
 
 //Fix increment
 char* to_upper(const char* s) {
-	char* up = strdup(s);
+	char* up = (char*) strdup(s);
 	char* to = up;
-	while (*to) {
+	int i ;
+	for (i = 0; i < len(s); i++) {
 		*to = toupper(*to);
 		to++;
 	}
+	*to = '\0';
 	return up;
 }
 
@@ -32,7 +34,7 @@ int is_fac_branch(char *branch) {
 	const char *br[] = {"MEB", "PEB", "KEB", "LEB", "EEB", "PKB", "CEB"};
 	int i;
 	for (i = 0; i < 7; i++) {
-		if (strcmp(br[i], branch) == 0) 
+		if (strcmp(br[i], branch) == 0)
 			return 1;
 	}
 	return 0;
@@ -63,7 +65,7 @@ int verify_fn(char* fac_no) {
 		strncpy(branch, &fn[2], 3); branch[3] = '\0';
 		strncpy(serial, &fn[5], 3); serial[3] = '\0';
 
-		if (is_fac_year(year) && is_fac_branch(branch) && is_serial_number(serial)){
+		if (is_fac_year(year) && is_fac_branch(branch) && is_serial_number(serial)) {
 			free(fn);
 			return 1;
 		}

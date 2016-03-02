@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include "textutils.h"
+#include <time.h>
 
 //#define PATH "/sdcard/AppProjects/LMS/jni/db.bin"
 #define PATH "db.bin"
@@ -22,8 +23,8 @@ struct Library {
 };
 
 struct Transactions {
-		char fac_no[8];
-		int date;
+		char fac_no[9];  //1 more for null
+		time_t date;
 		int book_id;
 };
 
