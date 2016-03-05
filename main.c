@@ -71,7 +71,7 @@ int main() {
 	}
 
 	printf("%s\n", db.password);
-	char* fn = "13peb049";
+	char* fn = "14peb049";
 	char* f = "12peb049";
 
 	/*if(strcmp(db.password, "0000")==0){
@@ -100,8 +100,8 @@ int main() {
 	printf("\nissue_count: %d\n", db.manager.issue_count);
 
 
-	print_issue_books(&db);
-	delete_from_issues(&db, 451, fn);
+	//print_issue_books(&db);
+	//delete_from_issues(&db, 451, fn);
 
 	/*
 	printf("%d\n", delete_index(array, 5, &length));
@@ -110,9 +110,13 @@ int main() {
 		printf("%d ", array[i]);
 	}
 	printf("%d", length);*/
-	printf("\nISSUES BOOKS\n\n");
+	printf("\nISSUED BOOKS:\n\n");
 	print_issue_books(&db);
 
+	int *j = get_issued_fac(&db, fn);
+	printf("\nALL BOOKS ISSUED To FAC\n");
+	
+	print_transaction(&db, j);
 	return 0;
 
 }
