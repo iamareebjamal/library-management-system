@@ -142,11 +142,14 @@ int* get_issued_fac(DB *db, char* fac) {
 void print_transaction(DB *db, int* index){
 
 	int i;
+	
 	for (i = 1; i<=index[0]; i++){
 		printf("\n%s\t", db->manager.issues[index[i]].fac_no);
 		print_date(db->manager.issues[index[i]].date);
 		print_book(find_by_id(db, db->manager.issues[index[i]].book_id));
 	}
 }
+
+
 
 #endif

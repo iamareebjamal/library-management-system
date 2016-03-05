@@ -81,10 +81,7 @@ int main() {
 	print_books(&db);
 	printf("\n\n\n");
 	list_books();
-	for (i = 0; i < db.manager.issue_count; i++) {
-		printf("here:%s\n", db.manager.issues[i].fac_no);
-	}
-
+	
 
 	//add_b();
 	//struct Book book = {"ASasdwaaw", "George RR Martin", "U/K", 0, 40};
@@ -93,10 +90,10 @@ int main() {
 
 
 
-	//issue_book(&db, 451, f);
+	issue_book(&db, 509, fn);
 	//printf("%d\n", is_already_issued(&db, 273, fn));
 
-	printf("\nstock :%d\n", db.library.books[451].stock);
+	printf("\nstock :%d\n", db.library.books[509].stock);
 	printf("\nissue_count: %d\n", db.manager.issue_count);
 
 
