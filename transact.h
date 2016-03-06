@@ -6,6 +6,10 @@
 #include "hash.h"
 #include <time.h>
 
+
+
+
+
 //*****************************************************************ISSUE MODULE*************************************************************************
 //******************************************************************************************************************************************************
 void print_date(time_t t) {
@@ -27,11 +31,11 @@ int is_already_issued(DB *db, int id, char *fac) {
 		if (strcmp(db->manager.issues[i].fac_no, fac_no) == 0 && (db->manager.issues[i].book_id == id)) {
 			printf("\nBOOK already issued to this faculty number :\t%s\n", fac);
 			free(fac_no);
-			return 1;
+			return i;
 		}
 	}
 	free(fac_no);
-	return 0;
+	return -1;
 }
 
 int is_book_avail(struct Book *book) {
@@ -40,9 +44,7 @@ int is_book_avail(struct Book *book) {
 
 int issue_book(DB *db, int id, char* fac) {
 
-	//add verify fac function
-	//donot issue if book stock is 0 ; delete key from library also decrease book count
-	if (is_already_issued(db, id, fac)) {
+	if (is_already_issued(db, id, fac) != -1) {
 		return -1;
 	}
 	struct Book *b = find_by_id(db, id);
@@ -139,15 +141,44 @@ int* get_issued_fac(DB *db, char* fac) {
 	return id_array;
 }
 
-void print_transaction(DB *db, int* index){
+/*struct Transactions* get_transaction(DB *db, int id, char *fac, int mode){
+	int i;
+	switch(mode){
+		case 1:{
+			for(i=0; i<db->manager.issue_count; i++){
+
+			}
+		}
+	}
+}*/
+void print_transaction(DB *db, int* index) {
 
 	int i;
-	
-	for (i = 1; i<=index[0]; i++){
-		printf("\n%s\t", db->manager.issues[index[i]].fac_no);
+
+	for (i = 1; i <= index[0]; i++) {
+		printf("\n%d: %s\t", i,db->manager.issues[index[i]].fac_no);
 		print_date(db->manager.issues[index[i]].date);
 		print_book(find_by_id(db, db->manager.issues[index[i]].book_id));
 	}
+}
+
+/*int get_selected_book(DB *db, int *index, int mode){
+	int i;
+	
+	switch(mode){
+		case 1:{
+			print_transaction(db,index);
+
+		}
+	}
+	printf("\nENTER YOUR SECLECTION:\t");
+	scanf("%d", &i);
+	return db->manager.issues[index[i]].book_id;
+	
+}*/
+
+int add_to_returns(DB *db, int id, char* fac){
+
 }
 
 

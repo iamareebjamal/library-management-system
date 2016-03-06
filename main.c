@@ -111,9 +111,10 @@ int main() {
 	print_issue_books(&db);
 
 	int *j = get_issued_fac(&db, fn);
-	printf("\nALL BOOKS ISSUED To FAC\n");
+	//printf("\nALL BOOKS ISSUED To FAC\n");
 	
-	print_transaction(&db, j);
+	/*i = get_selected_book(&db, j, 1);
+	printf("%d", i);*/
 	return 0;
 
 }
