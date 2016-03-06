@@ -18,11 +18,11 @@ void ask_pass() {
 	}
 }
 
-void test_upper(char *s, char *z){
+void test_upper(char *s, char *z) {
 
 	char *u = to_upper(s);
-	strcpy(z,u);
-	printf("%s: %s\n",u, z);
+	strcpy(z, u);
+	printf("%s: %s\n", u, z);
 	free (u);
 }
 
@@ -38,29 +38,31 @@ void list_books() {
 	free(list);
 }
 
-void add_b(){
+void add_b() {
 	struct Book b;
-	char title[40],author[40],pub[40];
+	char title[40], author[40], pub[40];
 	int count;
 	printf("enter title\n");
-	scanf("%s",title);
+	scanf("%s", title);
 	printf("enter author\n");
-	scanf("%s",author);
+	scanf("%s", author);
 	printf("enter pub\n");
-	scanf("%s",pub);
+	scanf("%s", pub);
 
 	printf("enter stock\n");
-	scanf("%d",&count);
+	scanf("%d", &count);
 
-	strcpy(b.title ,title);
-	strcpy(b.author,author);
+	strcpy(b.title , title);
+	strcpy(b.author, author);
 	strcpy(b.publisher, pub);
-	b.stock= count;
+	b.stock = count;
 	add_book(&db, &b);
 
 }
 
 int main() {
+	int array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+	int length = 9;
 	int i;
 	char pass[15];
 	if (load(&db) == 0) {
@@ -69,8 +71,8 @@ int main() {
 	}
 
 	printf("%s\n", db.password);
-	char* fn = "13peb049";
-	char* f = "14peb049";
+	char* fn = "14peb049";
+	char* f = "12peb049";
 
 	/*if(strcmp(db.password, "0000")==0){
 		ask_pass();
@@ -79,9 +81,6 @@ int main() {
 	print_books(&db);
 	printf("\n\n\n");
 	list_books();
-	for (i = 0; i<db.manager.issue_count;i++){
-		printf("here:%s\n",db.manager.issues[i].fac_no);
-	}
 
 
 	//add_b();
@@ -89,11 +88,31 @@ int main() {
 	//printf("%d\n", add_book(&db, &book));
 	printf("%d\n", db.library.book_count);
 
-	issue_book(&db, 396, fn);
-	//printf("%d\n", is_already_issued(&db, 273, fn));
 
-	printf("\nstock :%d\n", db.library.books[396].stock);
+
+	issue_book(&db, 509, fn);
+	
+
+	printf("\nstock :%d\n", db.library.books[509].stock);
 	printf("\nissue_count: %d\n", db.manager.issue_count);
+
+	print_issue_books(&db);
+
+
+
+	/*delete_from_issues(&db, 509, fn);
+
+	
+	printf("\nISSUED BOOKS:\n\n");
+	print_issue_books(&db);*/
+
+	//int *j = get_issued_fac(&db, fn);
+	//printf("\nALL BOOKS ISSUED To FAC\n");
+
+
+
+	i  = add_to_return(&db, 509, fn);
+	printf("\n%d\n",i );
 
 	return 0;
 
