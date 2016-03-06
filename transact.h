@@ -97,19 +97,14 @@ int delete_from_issues(DB *db, int id, char *fac) {
 	char *f = to_upper(fac);
 	int i, index;
 	struct Manager *m = &(db->manager);
-	for (i = 0; i < m->issue_count; i++) {
-		if (strcmp(f, m->issues[i].fac_no) == 0 && (m->issues[i].book_id == id)) {
-			printf("matched");
-			book_issued = 1;
-			index = i;
-		}
-	}
-	if (!book_issued) {
+	index = is_already_issued(db, id, fac);
+	if (index == -1) {
 		printf("cant delete since not issued\n");
 		free(f);
 		return 0;
 	}
-	if (book_issued) {
+	else{
+		
 		int book_id = delete_index(db->manager.issues, index, &(db->manager.issue_count));
 		struct Book *b = find_by_id(db, id);
 		b->stock++;
@@ -141,49 +136,30 @@ int* get_issued_fac(DB *db, char* fac) {
 	return id_array;
 }
 
-struct Transactions* get_transaction(DB *db, int id, char *fac, int mode) {
-	int i;
-	switch (mode) {
-	case 1: {
-		i = is_already_issued(db, id, fac);
-		return &(db->manager.issues[i]);
 
-	}
-	}
+
+void print_transaction(DB *db, struct Transactions *t) {
+
+	printf("%s\t", t->fac_no);
+
+	print_book(find_by_id(db, t->book_id));
+	print_date(t->date);
 }
 
-void print_transaction(DB *db, int* index, struct Transactions *t) {
 
+int add_to_return(DB *db, int id, char *fac) {
+	struct Transactions *t;
 	int i;
-	if (index != NULL) {
-		for (i = 1; i <= index[0]; i++) {
-			printf("\n%d: %s\t", i, db->manager.issues[index[i]].fac_no);
-			print_date(db->manager.issues[index[i]].date);
-			print_book(find_by_id(db, db->manager.issues[index[i]].book_id));
-		}
-	} else {
-		printf("%s\t%d\t", t->fac_no, t->book_id);
-		print_date(t->date);
+	i = is_already_issued(db, id, fac);
+	if (i != -1){
+		t = &(db->manager.issues[i]);
+		print_transaction(db, t);
 	}
+
+	db->manager.returns[db->manager.return_count++] = *t;
+
+	return db->manager.return_count;
 }
-
-/*int get_selected_book(DB *db, int *index, int mode){
-	int i;
-
-	switch(mode){
-		case 1:{
-			print_transaction(db,index);
-
-		}
-	}
-	printf("\nENTER YOUR SECLECTION:\t");
-	scanf("%d", &i);
-	return db->manager.issues[index[i]].book_id;
-
-}*/
-
-
-
 
 
 #endif

@@ -81,7 +81,7 @@ int main() {
 	print_books(&db);
 	printf("\n\n\n");
 	list_books();
-	
+
 
 	//add_b();
 	//struct Book book = {"ASasdwaaw", "George RR Martin", "U/K", 0, 40};
@@ -91,34 +91,29 @@ int main() {
 
 
 	issue_book(&db, 509, fn);
-	//printf("%d\n", is_already_issued(&db, 273, fn));
+	
 
 	printf("\nstock :%d\n", db.library.books[509].stock);
 	printf("\nissue_count: %d\n", db.manager.issue_count);
 
-
-	//print_issue_books(&db);
-	//delete_from_issues(&db, 451, fn);
-
-	/*
-	printf("%d\n", delete_index(array, 5, &length));
-	for (i = 0; i < length; ++i)
-	{
-		printf("%d ", array[i]);
-	}
-	printf("%d", length);*/
-	printf("\nISSUED BOOKS:\n\n");
 	print_issue_books(&db);
 
-	int *j = get_issued_fac(&db, fn);
-	//printf("\nALL BOOKS ISSUED To FAC\n");
-	
-	/*i = get_selected_book(&db, j, 1);
-	printf("%d", i);*/
 
-	struct Transactions* t = get_transaction(&db, 509, fn, 1);
-	print_transaction(&db,j, NULL);
+
+	/*delete_from_issues(&db, 509, fn);
+
 	
+	printf("\nISSUED BOOKS:\n\n");
+	print_issue_books(&db);*/
+
+	//int *j = get_issued_fac(&db, fn);
+	//printf("\nALL BOOKS ISSUED To FAC\n");
+
+
+
+	i  = add_to_return(&db, 509, fn);
+	printf("\n%d\n",i );
+
 	return 0;
 
 }
