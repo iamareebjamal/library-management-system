@@ -141,30 +141,35 @@ int* get_issued_fac(DB *db, char* fac) {
 	return id_array;
 }
 
-/*struct Transactions* get_transaction(DB *db, int id, char *fac, int mode){
+struct Transactions* get_transaction(DB *db, int id, char *fac, int mode) {
 	int i;
-	switch(mode){
-		case 1:{
-			for(i=0; i<db->manager.issue_count; i++){
+	switch (mode) {
+	case 1: {
+		i = is_already_issued(db, id, fac);
+		return &(db->manager.issues[i]);
 
-			}
-		}
 	}
-}*/
-void print_transaction(DB *db, int* index) {
+	}
+}
+
+void print_transaction(DB *db, int* index, struct Transactions *t) {
 
 	int i;
-
-	for (i = 1; i <= index[0]; i++) {
-		printf("\n%d: %s\t", i,db->manager.issues[index[i]].fac_no);
-		print_date(db->manager.issues[index[i]].date);
-		print_book(find_by_id(db, db->manager.issues[index[i]].book_id));
+	if (index != NULL) {
+		for (i = 1; i <= index[0]; i++) {
+			printf("\n%d: %s\t", i, db->manager.issues[index[i]].fac_no);
+			print_date(db->manager.issues[index[i]].date);
+			print_book(find_by_id(db, db->manager.issues[index[i]].book_id));
+		}
+	} else {
+		printf("%s\t%d\t", t->fac_no, t->book_id);
+		print_date(t->date);
 	}
 }
 
 /*int get_selected_book(DB *db, int *index, int mode){
 	int i;
-	
+
 	switch(mode){
 		case 1:{
 			print_transaction(db,index);
@@ -174,12 +179,10 @@ void print_transaction(DB *db, int* index) {
 	printf("\nENTER YOUR SECLECTION:\t");
 	scanf("%d", &i);
 	return db->manager.issues[index[i]].book_id;
-	
+
 }*/
 
-int add_to_returns(DB *db, int id, char* fac){
 
-}
 
 
 

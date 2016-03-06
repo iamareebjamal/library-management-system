@@ -115,6 +115,10 @@ int main() {
 	
 	/*i = get_selected_book(&db, j, 1);
 	printf("%d", i);*/
+
+	struct Transactions* t = get_transaction(&db, 509, fn, 1);
+	print_transaction(&db,j, NULL);
+	
 	return 0;
 
 }
