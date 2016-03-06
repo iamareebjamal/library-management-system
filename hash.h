@@ -79,6 +79,15 @@ struct Book* find_by_id(DB *db, int id) {
 	}
 }
 
+int update_book(DB *db, int id, int stock){
+	struct Book *book = find_by_id(db, id);
+	if(book){
+		book->stock = stock;
+		return save(db);
+	}
+	return 0;
+}
+
 /* Find a book by its exact title */
 // To Do: match by clean
 struct Book* find_book(DB *db, char* title) {
