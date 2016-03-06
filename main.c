@@ -90,10 +90,10 @@ int main() {
 
 
 
-	issue_book(&db, 191, fn);
+	issue_book(&db, 509, fn);
 	
 
-	printf("\nstock :%d\n", db.library.books[191].stock);
+	printf("\nstock :%d\n", db.library.books[509].stock);
 	printf("\nissue_count: %d\n", db.manager.issue_count);
 
 	print_issued_books(&db);
@@ -109,10 +109,16 @@ int main() {
 	//int *j = get_issued_fac(&db, fn);
 	//printf("\nALL BOOKS ISSUED To FAC\n");
 
-	update_book(&db, 191, 4554);
 
-	i  = add_to_return(&db, 191, fn);
-	printf("\n%d\n",i );
+
+	i  = add_to_return(&db, 509, fn);
+	printf("\nadding successful or not : %d\n",i);
+	printf("Return count: %d\n",db.manager.return_count);
+	
+
+	//delete_from_returns(&db, 509, fn);
+
+	printf("%d\n",db.manager.return_count);
 
 	return 0;
 
