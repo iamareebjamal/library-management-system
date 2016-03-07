@@ -90,10 +90,11 @@ int main() {
 
 
 
-	issue_book(&db, 509, fn);
+	//issue_book(&db, 509, fn);
 	
 
 	printf("\nstock :%d\n", db.library.books[509].stock);
+	
 	printf("\nissue_count: %d\n", db.manager.issue_count);
 
 	print_issued_books(&db);
@@ -106,19 +107,29 @@ int main() {
 	printf("\nISSUED BOOKS:\n\n");
 	print_issued_books(&db);*/
 
-	//int *j = get_issued_fac(&db, fn);
-	//printf("\nALL BOOKS ISSUED To FAC\n");
-
-
-
-	i  = add_to_return(&db, 509, fn);
-	printf("\nadding successful or not : %d\n",i);
-	printf("Return count: %d\n",db.manager.return_count);
+	int *j = get_issued_fac(&(db.manager), fn);
+	printf("\nALL BOOKS ISSUED To FAC\n");
+	for(i=1; i<=*j; i++){
+		print_transaction(&db, &(db.manager.issues[j[i]]));
+	}
 	
 
-	//delete_from_returns(&db, 509, fn);
+	
 
+	//i  = add_to_return(&db, &(db.manager.issues[j[1]]));
+	//printf("\nadding successful or not : %d\n",i);
+	printf("Return count: %d\n",db.manager.return_count);
+	i = return_book(&db, &(db.manager.issues[j[2]]));
+	printf("\nreturn successful or not : %d\n",i);
+	printf("Return count: %d\n",db.manager.return_count);
+	//delete_from_returns(&db, 509, fn);
+	
 	printf("%d\n",db.manager.return_count);
+	
+
+	print_issued_books(&db);
+
+	printf("%d\n",db.manager.issue_count );
 
 	return 0;
 
