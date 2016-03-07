@@ -90,7 +90,7 @@ int main() {
 
 
 
-	//issue_book(&db, 509, fn);
+	issue_book(&db, 509, fn);
 	
 
 	printf("\nstock :%d\n", db.library.books[509].stock);
@@ -118,7 +118,7 @@ int main() {
 
 	//i  = add_to_return(&db, &(db.manager.issues[j[1]]));
 	//printf("\nadding successful or not : %d\n",i);
-	printf("Return count: %d\n",db.manager.return_count);
+	/*printf("Return count: %d\n",db.manager.return_count);
 	i = return_book(&db, &(db.manager.issues[j[2]]));
 	printf("\nreturn successful or not : %d\n",i);
 	printf("Return count: %d\n",db.manager.return_count);
@@ -129,7 +129,7 @@ int main() {
 
 	print_issued_books(&db);
 
-	printf("%d\n",db.manager.issue_count );
+	printf("%d\n",db.manager.issue_count );*/
 
 	return 0;
 

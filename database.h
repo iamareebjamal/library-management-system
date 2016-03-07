@@ -46,20 +46,6 @@ int init(DB*);
 int load(DB*);
 
 
-void print_book(struct Book *b) {
-	printf("%-30s%-20s%-20s\t%d\n", b->title, b->author, b->publisher, b->id);
-}
-
-void print_books(DB *db){
-	//Print all the entered books
-	int i;
-	for(i = 0; i < db->library.book_count; i++){
-		struct Book b = db->library.books[db->library.keys[i]];
-		print_book(&b);
-	}
-}
-
-
 /* Setters */
 
 int set_password(DB *db, char* password) {
@@ -70,8 +56,6 @@ int set_password(DB *db, char* password) {
 	}
 	return 0;
 }
-
-
 
 /* File Operations */
 

@@ -10,11 +10,6 @@
 //******************************************************************************************************************************************************
 
 
-//to delete
-
-void print_date(time_t t) {
-	printf("%s", ctime(&t));
-}
 
 time_t get_current_date() {
 	time_t t = time(0);
@@ -72,9 +67,9 @@ void print_issued_books(DB *db) {
 	i = m->issue_count - 1;
 	for (i; i >= 0; i--) {
 		printf("%s\t", m->issues[i].fac_no);
-		print_date(m->issues[i].date);
 		struct Book *b = find_by_id(db, m->issues[i].book_id);
 		print_book(b);
+		printf("%s", ctime(&(m->issues[i].date)));
 	}
 }
 
@@ -115,7 +110,7 @@ void print_transaction(DB *db, struct Transactions *t) {
 	printf("%s\t", t->fac_no);
 
 	print_book(find_by_id(db, t->book_id));
-	print_date(t->date);
+	printf("%s", ctime(&(t->date)));
 }
 
 int is_in_returns(struct Manager *manager, int id, char *fac) {
