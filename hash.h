@@ -69,6 +69,11 @@ int add_book(DB *db, struct Book *book) {
 	return offset;
 }
 
+
+int is_book_avail(struct Book *book) {
+	return book->stock > 0;
+}
+
 struct Book* find_by_id(DB *db, int id) {
 
 	if (key_in_table(id, &db->library) == -1) {

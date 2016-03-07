@@ -10,14 +10,11 @@
 //******************************************************************************************************************************************************
 
 
-
+//to delete
 
 void print_date(time_t t) {
 	printf("%s", ctime(&t));
 }
-
-
-
 
 time_t get_current_date() {
 	time_t t = time(0);
@@ -26,14 +23,12 @@ time_t get_current_date() {
 	return t;
 }
 
-
-
-
-int is_already_issued(DB *db, int id, char *fac) {
+int is_already_issued(struct Manager *manager, int id, char *fac) {
 	int i;
 	char * fac_no = to_upper(fac);
-	for (i = 0; i < db->manager.issue_count; i++) {
-		if (strcmp(db->manager.issues[i].fac_no, fac_no) == 0 && (db->manager.issues[i].book_id == id)) {
+	for (i = 0; i < manager->issue_count; i++) {
+		printf("here: %d", manager->issue_count);
+		if (strcmp(manager->issues[i].fac_no, fac_no) == 0 && (manager->issues[i].book_id == id)) {
 			free(fac_no);
 			return i;
 		}
@@ -43,18 +38,9 @@ int is_already_issued(DB *db, int id, char *fac) {
 }
 
 
-
-
-int is_book_avail(struct Book *book) {
-	return book->stock > 0;
-}
-
-
-
-
 int issue_book(DB *db, int id, char* fac) {
 
-	if (is_already_issued(db, id, fac) != -1) {
+	if (is_already_issued(&(db->manager), id, fac) != -1) {
 		printf("\nBook already issued to this faculty number :\t%s\n", fac);
 		return 0;
 	}
@@ -79,9 +65,6 @@ int issue_book(DB *db, int id, char* fac) {
 
 }
 
-
-
-
 void print_issued_books(DB *db) {
 
 	int i;
@@ -95,42 +78,14 @@ void print_issued_books(DB *db) {
 	}
 }
 
-
-
-int delete_index(struct Transactions *array, int index, int *length) {
+void delete_index(struct Transactions *array, int index, int *length) {
 	struct Transactions item ;
 	item = array[index];
 	int i;
 	for (i = index; i < *length; i++) {
 		array[i] = array[i + 1];
 	}
-	*length = *length - 1;
-	return item.book_id;
-}
-
-
-
-
-int delete_from_issues(DB *db, int id, char *fac) {
-
-	char *f = to_upper(fac);
-	int index;
-	struct Manager *m = &(db->manager);
-	index = is_already_issued(db, id, fac);
-	if (index == -1) {
-		printf("cant delete since not issued\n");
-		free(f);
-		return 0;
-	}
-	else {
-
-		int book_id = delete_index(db->manager.issues, index, &(db->manager.issue_count));
-		struct Book *b = find_by_id(db, id);
-		save(db);
-	}
-
-	free(f);
-	return 1;
+	(*length)--;
 }
 
 //*****************************************************************************************************************************************************
@@ -142,23 +97,18 @@ int delete_from_issues(DB *db, int id, char *fac) {
 ////*****************************************************************RETURN MODULE*************************************************************************
 //******************************************************************************************************************************************************
 
-
-
-int* get_issued_fac(DB *db, char* fac) {
+int* get_issued_fac(struct Manager* manager, char* fac) {
 	char * fac_no = to_upper(fac);
 	int i;
 	int *id_array = (int*)calloc(1000, sizeof(int));
 
-	for (i = 0; i < db->manager.issue_count; i++) {
-		if (strcmp(db->manager.issues[i].fac_no, fac_no) == 0)
+	for (i = 0; i < manager->issue_count; i++) {
+		if (strcmp(manager->issues[i].fac_no, fac_no) == 0)
 			id_array[++id_array[0]] = i;
 	}
 	free(fac_no);
 	return id_array;
 }
-
-
-
 
 void print_transaction(DB *db, struct Transactions *t) {
 
@@ -168,14 +118,11 @@ void print_transaction(DB *db, struct Transactions *t) {
 	print_date(t->date);
 }
 
-
-
-
-int is_in_returns(DB *db, int id, char *fac){
+int is_in_returns(struct Manager *manager, int id, char *fac) {
 	int i;
 	char *fac_no = to_upper(fac);
-	for (i = 0; i < db->manager.return_count; i++) {
-		if (strcmp(db->manager.returns[i].fac_no, fac_no) == 0 && (db->manager.returns[i].book_id == id)){
+	for (i = 0; i < manager->return_count; i++) {
+		if (strcmp(manager->returns[i].fac_no, fac_no) == 0 && (manager->returns[i].book_id == id)) {
 			free(fac_no);
 			return i;
 		}
@@ -184,45 +131,42 @@ int is_in_returns(DB *db, int id, char *fac){
 	return -1;
 }
 
+/* Different error warnings */
+int add_to_return(DB *db, struct Transactions* transact) {
+	int index = is_already_issued(&(db->manager), transact->book_id, transact->fac_no);
 
-
-
-int add_to_return(DB *db, int id, char *fac) {
-	struct Transactions *t;
-	int index = is_already_issued(db, id, fac);
-
-	if ((index != -1) && (is_in_returns(db,id,fac) == -1)) {
-		t = &(db->manager.issues[index]);
-		db->manager.returns[db->manager.return_count++] = *t;
+	if ((index != -1) && (is_in_returns(&(db->manager), transact->book_id, transact->fac_no) == -1)) {
+		db->manager.returns[db->manager.return_count++] = *transact;
 		return save(db);
-	}else{
-		printf("Error !");
+	} else {
+		printf("Error ! Already queued for returns!");
 		return 0;
 	}
-	
+
 }
 
+int return_book(DB *db, struct Transactions* transact) {
+	int return_index = is_in_returns(&(db->manager), transact->book_id, transact->fac_no);
+	int issue_index = is_already_issued(&(db->manager), transact->book_id, transact->fac_no);
 
-
-
-int delete_from_returns(DB *db, int id, char* fac) {
-	int i;
-	char *fac_no = to_upper(fac);
-	if(is_in_returns(db,id,fac) == -1){
-		printf("Can't delete ");
+	if (return_index == -1) {
+		printf("Not queued for returns!");
 		return 0;
 	}
-	for (i = 0; i < db->manager.return_count; i++) {
-		if (strcmp(db->manager.returns[i].fac_no, fac_no) == 0 && (db->manager.returns[i].book_id == id))
-			break;
+
+	if (issue_index == -1) {
+		printf("Not found in issues!");
+		return -1;
 	}
-	int book_id = delete_index(db->manager.returns, i, &(db->manager.return_count));
-	struct Book *b = find_by_id(db, id);
+
+	struct Book *b = find_by_id(db, transact->book_id);
 	b->stock++;
-	save(db);
-	return 1;
-}
 
+	delete_index(db->manager.returns, return_index, &(db->manager.return_count));
+	delete_index(db->manager.issues, issue_index, &(db->manager.issue_count));
+
+	return save(db);
+}
 
 
 #endif

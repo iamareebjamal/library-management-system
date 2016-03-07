@@ -71,28 +71,6 @@ int set_password(DB *db, char* password) {
 	return 0;
 }
 
-int delete_value(int value, int* array, int *size) {
-	int i = 0, shift = 0;
-	for (i = 0; i < *size; i++) {
-		if (array[i] == value) {
-			shift = 1;
-		}
-
-		if (shift){
-			if (i != *size - 1)
-				array[i] = array[i + 1];
-			else
-				break;
-		}
-	}
-
-	if (shift) {
-		(*size)--;
-		return 1;
-	}
-	return 0;
-}
-
 
 
 /* File Operations */
