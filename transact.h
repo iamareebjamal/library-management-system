@@ -31,7 +31,13 @@ int is_already_issued(struct Manager *manager, int id, char *fac) {
 	free(fac_no);
 	return -1;
 }
-
+/**
+ * issue_book function :
+ * @params = DB*, int id, char * faculty_number
+ * @return = 0, when book is already issued 
+ *           1, when successfull issue
+ *          -1, when book not found or book stock is 0   
+ */
 
 int issue_book(DB *db, int id, char* fac) {
 
@@ -41,6 +47,7 @@ int issue_book(DB *db, int id, char* fac) {
 	}
 
 	struct Book *b = find_by_id(db, id);
+	
 	if (b != NULL && is_book_avail(b)) {
 		int *issue_count = &(db->manager.issue_count);
 		struct Transactions *transact = &(db->manager.issues[(*issue_count)++]);
@@ -56,7 +63,7 @@ int issue_book(DB *db, int id, char* fac) {
 		return 1;
 	}
 
-	return 0;
+	return -1;
 
 }
 
@@ -92,6 +99,13 @@ void delete_index(struct Transactions *array, int index, int *length) {
 ////*****************************************************************RETURN MODULE*************************************************************************
 //******************************************************************************************************************************************************
 
+
+/**
+ * [get_issued_fac gives list of indexes where it founds the issued books of particular faculty number
+ * @param  manager [pointer to the manager that contains the issues and returns array also respective count]
+ * @param  fac     [faculty number whose issued books to list]
+ * @return         [int pointer to the indexes where in issue the match is found]
+ */
 int* get_issued_fac(struct Manager* manager, char* fac) {
 	char * fac_no = to_upper(fac);
 	int i;
@@ -113,6 +127,10 @@ void print_transaction(DB *db, struct Transactions *t) {
 	printf("%s", ctime(&(t->date)));
 }
 
+/**
+ * @return      index if the book found in returns array
+ *              -1 if book not found 
+ */
 int is_in_returns(struct Manager *manager, int id, char *fac) {
 	int i;
 	char *fac_no = to_upper(fac);
@@ -127,6 +145,7 @@ int is_in_returns(struct Manager *manager, int id, char *fac) {
 }
 
 /* Different error warnings */
+//DONOT WRITE ABOUT THIS FUNCTION STILL TO REBASE
 int add_to_return(DB *db, struct Transactions* transact) {
 	int index = is_already_issued(&(db->manager), transact->book_id, transact->fac_no);
 
@@ -139,6 +158,12 @@ int add_to_return(DB *db, struct Transactions* transact) {
 	}
 
 }
+
+/*
+	@return 0, when not found in returns array
+		   -1, when not found in issues array
+		    1, when succesfull transaction
+ */
 
 int return_book(DB *db, struct Transactions* transact) {
 	int return_index = is_in_returns(&(db->manager), transact->book_id, transact->fac_no);
