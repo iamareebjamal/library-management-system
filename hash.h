@@ -61,6 +61,19 @@ int insert_in_hash( DB *db, struct Book *book, unsigned long hash) {
 	}
 }
 
+void print_book(struct Book *b) {
+	printf("%-30s%-20s%-20s\t%d\n", b->title, b->author, b->publisher, b->id);
+}
+
+void print_books(DB *db){
+	//Print all the entered books
+	int i;
+	for(i = 0; i < db->library.book_count; i++){
+		struct Book b = db->library.books[db->library.keys[i]];
+		print_book(&b);
+	}
+}
+
 int add_book(DB *db, struct Book *book) {
 	//Generate hash address for the book
 	unsigned long hash = gen_hash(gen_key(book->title));
