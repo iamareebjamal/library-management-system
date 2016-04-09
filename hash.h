@@ -34,7 +34,7 @@ int key_in_table(int key, struct Library *library) {
 	return -1;
 }
 
-int insert_in_hash( DB *db, struct Book *book, unsigned long hash) {
+int insert_in_hash(DB *db, struct Book *book, unsigned long hash) {
 	int offset = hash % 997;
 	//Check if the address is pre-occupied
 	if (key_in_table(offset, &db->library) == -1) {
@@ -43,33 +43,45 @@ int insert_in_hash( DB *db, struct Book *book, unsigned long hash) {
 		int *index = &(lib->book_count);
 		lib->keys[(*index)++] = offset;
 		lib->books[offset] = *book;
-		printf("Book entered\n");
-		printf("Offset : %d\n", offset);
+		printf("\nBook entered\tID : %d\n", offset);
 		save(db);
 		return offset;
 	} else {
-		//Either Collision has occurred or same ID book is being added again!
-		//Let's find out what?
-		if (strcmp(db->library.books[offset].title, book->title) == 0) {
-			printf("Same Book entered\tOffset : %d\n", offset);
+		// Either Collision has occurred or same ID book is being added again!
+		// Let's find out what?
+
+		// Clean, strip and capitalise the entries
+		char* stored = to_upper(db->library.books[offset].title);
+		char* current = to_upper(book->title);
+		clean(stored); clean(current);
+
+		int matched = strcmp(stored , current) == 0;
+		free(stored); free(current);
+
+		if (matched) {
+			printf("\nBook is already in database\tID : %d\n", offset);
 			book->id = offset;
 			return -1;
 		} else {
-			printf("Collision\n");
+			// Collision has occurred. Linearly probe the hash
 			insert_in_hash(db, book, hash + 1);
 		}
 	}
+
+	return -1;
 }
 
 void print_book(struct Book *b) {
-	printf("%-30s%-20s%-20s\t%d\n", b->title, b->author, b->publisher, b->id);
+	printf("%-30s%-20s%-20s%d\n", b->title, b->author, b->publisher, b->stock);
 }
 
 void print_books(DB *db){
 	//Print all the entered books
 	int i;
+	printf("\n%-33s%-20s%-19s%-20s\n\n", "Title", "Author", "Publisher", "Stock");
 	for(i = 0; i < db->library.book_count; i++){
 		struct Book b = db->library.books[db->library.keys[i]];
+		printf("\n%d. ", i+1);
 		print_book(&b);
 	}
 }
@@ -78,13 +90,7 @@ int add_book(DB *db, struct Book *book) {
 	//Generate hash address for the book
 	unsigned long hash = gen_hash(gen_key(book->title));
 	int offset =  insert_in_hash(db, book, hash);
-	printf("Returned offset : %d\n", offset);
 	return offset;
-}
-
-
-int is_book_avail(struct Book *book) {
-	return book->stock > 0;
 }
 
 struct Book* find_by_id(DB *db, int id) {
@@ -121,9 +127,10 @@ struct Book* find_book(DB *db, char* title) {
 	}
 
 	if (strcmp(db->library.books[offset].title, title) == 0) {
+		printf("\nBook found...\n");
 		return &db->library.books[offset];
 	} else {
-		printf("Book not found...\n");
+		printf("\nBook not found by exact search...\n");
 		return NULL;
 	}
 
@@ -150,7 +157,6 @@ int* search_books(DB *db, char* search, int mode) {
 		}
 		free(pattern);
 		return list;
-		break;
 	case 1:
 		for (i = 0; i < db->library.book_count; i++) {
 			struct Book book = db->library.books[db->library.keys[i]];
@@ -163,7 +169,6 @@ int* search_books(DB *db, char* search, int mode) {
 		}
 		free(pattern);
 		return list;
-		break;
 	case 2:
 		for (i = 0; i < db->library.book_count; i++) {
 			struct Book book = db->library.books[db->library.keys[i]];
@@ -176,7 +181,6 @@ int* search_books(DB *db, char* search, int mode) {
 		}
 		free(pattern);
 		return list;
-		break;
 	default:
 		printf("Invalid Mode. Range 0~2\n");
 		return NULL;

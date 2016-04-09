@@ -7,7 +7,7 @@
 #include <malloc.h>
 
 size_t len(const char* str) {
-	int len = 0;
+	size_t len = 0;
 	while (*str++)
 		len++;
 	return len;
@@ -15,11 +15,11 @@ size_t len(const char* str) {
 
 //Fix increment
 char* to_upper(const char* s) {
-	char* up = (char*) strdup(s);
+	char* up = strdup(s);
 	char* to = up;
 	int i ;
 	for (i = 0; i < len(s); i++) {
-		*to = toupper(*to);
+		toupper(*to);
 		to++;
 	}
 	*to = '\0';
@@ -41,12 +41,12 @@ int is_fac_branch(char *branch) {
 }
 
 int is_serial_number(char *serial) {
-	int i = 0;
+	int i;
 
 	if (len(serial) != 3)
 		return 0;
 
-	for (i; i <= 2; i++) {
+	for (i=0; i <= 2; i++) {
 		if (!(serial[i] >= '0' && serial[i] <= '9'))
 			return 0;
 	}
@@ -56,16 +56,16 @@ int is_serial_number(char *serial) {
 
 int verify_fn(char* fac_no) {
 	char* fn = to_upper(fac_no);
-	char year[2], branch[3], serial[3];
+	char year[3], branch[4], serial[4];
 
-	int n = len(fn);
+	size_t n = len(fn);
 	if (n == 8) {
 		//Generating Substrings
 		strncpy(year, fn, 2); year[2] = '\0';
 		strncpy(branch, &fn[2], 3); branch[3] = '\0';
 		strncpy(serial, &fn[5], 3); serial[3] = '\0';
-
 		if (is_fac_year(year) && is_fac_branch(branch) && is_serial_number(serial)) {
+
 			free(fn);
 			return 1;
 		}
@@ -75,7 +75,7 @@ int verify_fn(char* fac_no) {
 }
 
 int verify_pass(char* pass) {
-	int n = len(pass);
+	size_t n = len(pass);
 	if (n >= 8 && n < 16) {
 		while (*++pass) {
 			if (*pass == ' ' || *pass == '\t')

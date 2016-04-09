@@ -8,10 +8,11 @@
 //#define PATH "/sdcard/AppProjects/LMS/jni/db.bin"
 #define PATH "db.bin"
 
+// Change to 50
 struct Book {
-	char title[40];
-	char author[40];
-	char publisher[40];
+	char title[50];
+	char author[50];
+	char publisher[50];
 	int  id;
 	int  stock;
 };
@@ -45,7 +46,6 @@ int save(DB*);
 int init(DB*);
 int load(DB*);
 
-
 /* Setters */
 
 int set_password(DB *db, char* password) {
@@ -56,6 +56,7 @@ int set_password(DB *db, char* password) {
 	}
 	return 0;
 }
+
 
 /* File Operations */
 
@@ -73,7 +74,7 @@ int save(DB *db) {
 
 int init(DB* db) {
 	printf("Creating new Database...\n");
-	char* pass = "0000";
+	char pass[5] = "0000";
 	printf("Values Initialised...\n");
 	db->manager.issue_count = 0;
 	db->manager.return_count = 0;
@@ -86,12 +87,11 @@ int load(DB *di) {
 	FILE *fi;
 	fi = fopen(PATH, "rb");
 	if (fi == NULL) {
-		if (init(di) == 0) {
+		if (init(di) == 0)
 			return 0;
-		}
 		return 1;
 	}
-	printf("Reading old Database...\n");
+	printf("Loading Database...\n");
 	fread(di, sizeof(DB), 1, fi);
 	fclose(fi);
 	return 1;

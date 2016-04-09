@@ -18,11 +18,14 @@ time_t get_current_date() {
 	return t;
 }
 
+int is_book_avail(struct Book *book) {
+	return book->stock > 0;
+}
+
 int is_already_issued(struct Manager *manager, int id, char *fac) {
 	int i;
 	char * fac_no = to_upper(fac);
 	for (i = 0; i < manager->issue_count; i++) {
-		printf("here: %d", manager->issue_count);
 		if (strcmp(manager->issues[i].fac_no, fac_no) == 0 && (manager->issues[i].book_id == id)) {
 			free(fac_no);
 			return i;
@@ -34,9 +37,9 @@ int is_already_issued(struct Manager *manager, int id, char *fac) {
 /**
  * issue_book function :
  * @params = DB*, int id, char * faculty_number
- * @return = 0, when book is already issued 
+ * @return = 0, when book is already issued
  *           1, when successfull issue
- *          -1, when book not found or book stock is 0   
+ *          -1, when book not found or book stock is 0
  */
 
 int issue_book(DB *db, int id, char* fac) {
@@ -47,7 +50,7 @@ int issue_book(DB *db, int id, char* fac) {
 	}
 
 	struct Book *b = find_by_id(db, id);
-	
+
 	if (b != NULL && is_book_avail(b)) {
 		int *issue_count = &(db->manager.issue_count);
 		struct Transactions *transact = &(db->manager.issues[(*issue_count)++]);
@@ -64,15 +67,12 @@ int issue_book(DB *db, int id, char* fac) {
 	}
 
 	return -1;
-
 }
 
 void print_issued_books(DB *db) {
-
 	int i;
 	struct Manager *m = &db->manager;
-	i = m->issue_count - 1;
-	for (i; i >= 0; i--) {
+	for (i = m->issue_count - 1; i >= 0; i--) {
 		printf("%s\t", m->issues[i].fac_no);
 		struct Book *b = find_by_id(db, m->issues[i].book_id);
 		print_book(b);
@@ -81,8 +81,6 @@ void print_issued_books(DB *db) {
 }
 
 void delete_index(struct Transactions *array, int index, int *length) {
-	struct Transactions item ;
-	item = array[index];
 	int i;
 	for (i = index; i < *length; i++) {
 		array[i] = array[i + 1];
@@ -106,8 +104,8 @@ void delete_index(struct Transactions *array, int index, int *length) {
  * @param  fac     [faculty number whose issued books to list]
  * @return         [int pointer to the indexes where in issue the match is found]
  */
-int* get_issued_fac(struct Manager* manager, char* fac) {
-	char * fac_no = to_upper(fac);
+int* get_issued_fac(struct Manager* manager, char fac[9]) {
+	char *fac_no = to_upper(fac);
 	int i;
 	int *id_array = (int*)calloc(1000, sizeof(int));
 
@@ -129,7 +127,7 @@ void print_transaction(DB *db, struct Transactions *t) {
 
 /**
  * @return      index if the book found in returns array
- *              -1 if book not found 
+ *              -1 if book not found
  */
 int is_in_returns(struct Manager *manager, int id, char *fac) {
 	int i;
@@ -162,7 +160,7 @@ int add_to_return(DB *db, struct Transactions* transact) {
 /*
 	@return 0, when not found in returns array
 		   -1, when not found in issues array
-		    1, when succesfull transaction
+		    1, when successful transaction
  */
 
 int return_book(DB *db, struct Transactions* transact) {
@@ -170,12 +168,12 @@ int return_book(DB *db, struct Transactions* transact) {
 	int issue_index = is_already_issued(&(db->manager), transact->book_id, transact->fac_no);
 
 	if (return_index == -1) {
-		printf("Not queued for returns!");
+		printf("\nNot queued for returns!");
 		return 0;
 	}
 
 	if (issue_index == -1) {
-		printf("Not found in issues!");
+		printf("\nNot found in issues!");
 		return -1;
 	}
 
