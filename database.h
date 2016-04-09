@@ -5,7 +5,6 @@
 #include "textutils.h"
 #include <time.h>
 
-//#define PATH "/sdcard/AppProjects/LMS/jni/db.bin"
 #define PATH "db.bin"
 
 // Change to 50

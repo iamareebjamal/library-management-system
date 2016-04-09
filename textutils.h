@@ -60,7 +60,7 @@ int verify_fn(char* fac_no) {
 
 	size_t n = len(fn);
 	if (n == 8) {
-		//Generating Substrings
+		//Generating Sub-strings
 		strncpy(year, fn, 2); year[2] = '\0';
 		strncpy(branch, &fn[2], 3); branch[3] = '\0';
 		strncpy(serial, &fn[5], 3); serial[3] = '\0';

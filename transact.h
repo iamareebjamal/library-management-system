@@ -38,7 +38,7 @@ int is_already_issued(struct Manager *manager, int id, char *fac) {
  * issue_book function :
  * @params = DB*, int id, char * faculty_number
  * @return = 0, when book is already issued
- *           1, when successfull issue
+ *           1, when successful issue
  *          -1, when book not found or book stock is 0
  */
 
@@ -56,7 +56,6 @@ int issue_book(DB *db, int id, char* fac) {
 		struct Transactions *transact = &(db->manager.issues[(*issue_count)++]);
 		char* fac_no = to_upper(fac);
 		strcpy(transact->fac_no , fac_no);
-		//printf("%s\n",transact->fac_no);
 		transact->book_id = id;
 		transact->date = get_current_date();
 		b->stock--;
@@ -142,8 +141,6 @@ int is_in_returns(struct Manager *manager, int id, char *fac) {
 	return -1;
 }
 
-/* Different error warnings */
-//DONOT WRITE ABOUT THIS FUNCTION STILL TO REBASE
 int add_to_return(DB *db, struct Transactions* transact) {
 	int index = is_already_issued(&(db->manager), transact->book_id, transact->fac_no);
 

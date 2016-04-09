@@ -24,7 +24,7 @@ int prompt(const char* str){
 
 void input(char* str, size_t size) {
 	do{
-		fgets(str, size, stdin);
+		fgets(str, (int) size, stdin);
 		str[strcspn(str, "\n")] = '\0';
 	} while(strcmp(str, "")==0 && !prompt("Please Retry."));
 }
@@ -183,7 +183,6 @@ int issue() {
 	char query[50], fac_no[9];
 	struct Book* book = NULL;
 
-	// Return if library is empty
 	if(db.library.book_count==0)
 		return !prompt("Sorry. The library is currently empty.");
 
