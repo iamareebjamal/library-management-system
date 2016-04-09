@@ -2,12 +2,19 @@
 #define UI_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "transact.h"
 
 DB db;
 
 DB *getDB() {
     return &db;
+}
+
+void clear() {
+    int i = 25;
+    while (i--)
+        printf("\n");
 }
 
 void flush() {
@@ -152,6 +159,8 @@ int add_to_stock() {
 
 int manage_stock() {
     int select, stock;
+
+    clear();
     print_books(&db);
     printf("\n\nPlease enter 0 for adding a book to stock and choose "
                    "any book otherwise for modification :\n-> ");
@@ -187,6 +196,7 @@ int issue() {
     char query[50], fac_no[9];
     struct Book *book = NULL;
 
+    clear();
     if (db.library.book_count == 0)
         return !prompt("Sorry. The library is currently empty.");
 
@@ -248,6 +258,7 @@ int request_return() {
     int select, i;
     char fac_no[9];
 
+    clear();
     get_fac_no(fac_no);
     if (strcmp(fac_no, "^cancel") == 0)
         return !prompt("\nReturn request of book cancelled.");
@@ -281,19 +292,21 @@ int request_return() {
 
 int approve_returns() {
     int i;
-    if(db.manager.return_count==0)
+
+    clear();
+    if (db.manager.return_count == 0)
         return !prompt("No requests for returns.");
 
     for (i = 0; i < db.manager.return_count; i++) {
         printf("%d. ", i + 1);
         print_transaction(&db, &(db.manager.returns[i]));
     }
-    printf("%d: Exit\n", i+1);
+    printf("%d: Exit\n", i + 1);
 
     printf("Select the book to return:\t");
     i = valid_selection(db.manager.return_count + 2);
     if (!i) return 0;
-    else if (i == db.manager.return_count+1) return !prompt("\nReturn request cancelled.");
+    else if (i == db.manager.return_count + 1) return !prompt("\nReturn request cancelled.");
 
     if (return_book(&db, &(db.manager.returns[i - 1])) == 1)
         return !prompt("\nSuccessfully returned.");

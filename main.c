@@ -5,9 +5,10 @@ void admin_panel();
 int main() {
     int select;
     if (!construct())
-        return 1;
+        return !prompt("");
 
     do {
+        clear();
         printf("\n\nWelcome to Library Management System\n\nMain Menu:\n"
                        "1. Issue a Book\n2. Return a Book\n"
                        "3. Admin Panel\n4. Exit\n"
@@ -44,6 +45,7 @@ void admin_panel() {
         return;
 
     do {
+        clear();
         printf("\n\nAdmin Tools\n"
                        "1. See Issued Books\n2. Approve Returns\n"
                        "3. Manage Stock\n4. Change Password\n"
