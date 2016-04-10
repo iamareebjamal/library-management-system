@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
+/* Length of a null terminated string */
 size_t len(const char *str) {
     size_t len = 0;
     while (*str++)
@@ -13,7 +14,7 @@ size_t len(const char *str) {
     return len;
 }
 
-//Fix increment
+/* Capitalize the string */
 char *to_upper(const char *s) {
     char *up = strdup(s);
     char *to = up;
@@ -26,6 +27,7 @@ char *to_upper(const char *s) {
     return up;
 }
 
+/* Faculty Number Verification */
 int is_fac_year(char *year) {
     return ((year[0] >= '0' && year[0] <= '1') && (year[1] >= '0' && year[1] <= '9') && len(year) == 2);
 }
@@ -77,6 +79,7 @@ int verify_fn(char *fac_no) {
     return 0;
 }
 
+/* Password Verification */
 int verify_pass(char *pass) {
     size_t n = len(pass);
     if (n >= 8 && n < 16) {
@@ -89,6 +92,7 @@ int verify_pass(char *pass) {
     return 0;
 }
 
+/* Strip and Trim the string */
 void clean(char *s) {
     int i, j = 0;
     for (i = 0; i < len(s); i++) {

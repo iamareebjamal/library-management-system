@@ -26,7 +26,7 @@ int main() {
             case 3:
                 admin_panel();
                 break;
-            case 4:
+            case 4: // Exit
                 break;
             default:
                 prompt("Please enter correct choice.");
@@ -41,6 +41,7 @@ int main() {
 void admin_panel() {
     int select;
 
+    // Verify the admin credentials
     if (!match_pass())
         return;
 
@@ -68,7 +69,7 @@ void admin_panel() {
             case 4:
                 change_pass();
                 break;
-            case 5:
+            case 5: // Exit
                 break;
             default:
                 prompt("Wrong choice entered. Try again.");

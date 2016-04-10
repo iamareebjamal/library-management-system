@@ -1,13 +1,10 @@
 #ifndef DB_H
 #define DB_H
 
-#include <string.h>
 #include "textutils.h"
 #include <time.h>
 
-#define PATH "db.bin"
-
-// Change to 50
+#define PATH "db.bin" // Relative path to database
 struct Book {
     char title[50];
     char author[50];
@@ -23,7 +20,7 @@ struct Library {
 };
 
 struct Transactions {
-    char fac_no[9];  //1 more for null
+    char fac_no[9];  // 1 character more for null
     time_t date;
     int book_id;
 };
@@ -41,26 +38,16 @@ typedef struct DB {
     char password[15];
 } DB;
 
-int save(DB *);
-
-int init(DB *);
-
-int load(DB *);
-
 /* Setters */
-
 int set_password(DB *db, char *password) {
     if (verify_pass(password)) {
         strcpy(db->password, password);
-        save(db);
-        return 1;
+        return save(db);
     }
     return 0;
 }
 
-
 /* File Operations */
-
 int save(DB *db) {
     FILE *fo;
     fo = fopen(PATH, "wb");
@@ -74,9 +61,8 @@ int save(DB *db) {
 }
 
 int init(DB *db) {
-    printf("Creating new Database...\n");
+    // Initialise values
     char pass[5] = "0000";
-    printf("Values Initialised...\n");
     db->manager.issue_count = 0;
     db->manager.return_count = 0;
     db->library.book_count = 0;
@@ -92,7 +78,6 @@ int load(DB *di) {
             return 0;
         return 1;
     }
-    printf("Loading Database...\n");
     fread(di, sizeof(DB), 1, fi);
     fclose(fi);
     return 1;

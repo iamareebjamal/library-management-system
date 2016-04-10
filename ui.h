@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "transact.h"
 
+// Define clear based on OS
 #if defined(_WIN32) || defined(_WIN64)
     #define clear() system("cls")
 #else
@@ -17,11 +18,13 @@ DB *getDB() {
     return &db;
 }
 
+/* Clean the input stream from trailing newlines */
 void flush() {
     int c; // Because getchar returns int, not char
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+/* Display the error message with continue confiramtion */
 int prompt(const char *str) {
     printf("%s", str);
     printf(" Press any key to continue...");
@@ -29,6 +32,7 @@ int prompt(const char *str) {
     return 0;
 }
 
+/* Secure input in a string with a check for empty strings */
 void input(char *str, size_t size) {
     do {
         fgets(str, (int) size, stdin);
@@ -36,6 +40,7 @@ void input(char *str, size_t size) {
     } while (strcmp(str, "") == 0 && !prompt("Please Retry."));
 }
 
+/* Password Verification and Updation */
 void ask_pass() {
     char password[15];
     printf("\n\nPlease enter new password : ");
@@ -79,27 +84,19 @@ void change_pass() {
     ask_pass();
 }
 
+/* Handle loading of the database from disk */
 int construct() {
     if (load(&db) == 0)
         return prompt("Database load failed. Terminating.");
 
+    // Ask password if it's the first run
     if (strcmp(db.password, "0000") == 0)
         ask_pass();
 
     return 1;
 }
 
-void print_list(int *list) {
-    int size = *list;
-    int i;
-    printf("\n%-33s%-20s%-19s%s\n\n", "Title", "Author", "Publisher", "Stock");
-    for (i = 1; i <= size; i++) {
-        printf("\n%d. ", i);
-        struct Book *b = find_by_id(&db, list[i]);
-        print_book(b);
-    }
-}
-
+/* Faculty Number Input */
 void get_fac_no(char fac_no[9]) {
     printf("\n\nPlease enter your faculty number : ");
     input(fac_no, 9);
@@ -116,6 +113,19 @@ void get_fac_no(char fac_no[9]) {
 
 }
 
+/* Print an arbitrary list of books */
+void print_list(int *list) {
+    int size = *list;
+    int i;
+    printf("\n%-33s%-20s%-19s%s\n\n", "Title", "Author", "Publisher", "Stock");
+    for (i = 1; i <= size; i++) {
+        printf("\n%d. ", i);
+        struct Book *b = find_by_id(&db, list[i]);
+        print_book(b);
+    }
+}
+
+/* Verify if input is within bounds */
 int valid_selection(int upper) {
     int select;
     scanf("%d", &select);
@@ -127,6 +137,7 @@ int valid_selection(int upper) {
     return select;
 }
 
+/* Book input front-end */
 int add_to_stock() {
     struct Book b;
     char title[50], author[50], publisher[50];
@@ -156,6 +167,7 @@ int add_to_stock() {
     return !prompt("");
 }
 
+/* Library Stock Management */
 int manage_stock() {
     int select, stock;
 
@@ -191,7 +203,7 @@ int manage_stock() {
     return !prompt("Stock Updated.");
 }
 
-
+/* Book Issue front-end */
 int issue() {
     int select;
     char query[50], fac_no[9];
@@ -255,6 +267,7 @@ int issue() {
     return !prompt("\n");
 }
 
+/* Book return request front-end */
 int request_return() {
     int select, i;
     char fac_no[9];
@@ -292,6 +305,7 @@ int request_return() {
     return !prompt("\n");
 }
 
+/* Book return approval front-end */
 int approve_returns() {
     int i;
 

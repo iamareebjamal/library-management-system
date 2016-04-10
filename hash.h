@@ -8,6 +8,7 @@ static const int TITLE = 0;
 static const int AUTHOR = 1;
 static const int PUBLISHER = 2;
 
+/* Hash key generators */
 char *gen_key(char *string) {
     char *key = to_upper(string);
     clean(key);
@@ -24,6 +25,23 @@ unsigned long gen_hash(char *key) {
     return hash;
 }
 
+/* Book Printing */
+void print_book(struct Book *b) {
+    printf("%-30s%-20s%-20s%d\n", b->title, b->author, b->publisher, b->stock);
+}
+
+void print_books(DB *db) {
+    //Print all the entered books
+    int i;
+    printf("\n%-33s%-20s%-19s%-20s\n\n", "Title", "Author", "Publisher", "Stock");
+    for (i = 0; i < db->library.book_count; i++) {
+        struct Book b = db->library.books[db->library.keys[i]];
+        printf("\n%d. ", i + 1);
+        print_book(&b);
+    }
+}
+
+/* Checks if a key is present in hash table */
 int key_in_table(int key, struct Library *library) {
     int len = library->book_count;
     int i;
@@ -34,6 +52,7 @@ int key_in_table(int key, struct Library *library) {
     return -1;
 }
 
+/* Hash insertions  */
 int insert_in_hash(DB *db, struct Book *book, unsigned long hash) {
     int offset = hash % 997;
     //Check if the address is pre-occupied
@@ -48,8 +67,6 @@ int insert_in_hash(DB *db, struct Book *book, unsigned long hash) {
         return offset;
     } else {
         // Either Collision has occurred or same ID book is being added again!
-        // Let's find out what?
-
         // Clean, strip and capitalise the entries
         char *stored = to_upper(db->library.books[offset].title);
         char *current = to_upper(book->title);
@@ -73,21 +90,6 @@ int insert_in_hash(DB *db, struct Book *book, unsigned long hash) {
     return -1;
 }
 
-void print_book(struct Book *b) {
-    printf("%-30s%-20s%-20s%d\n", b->title, b->author, b->publisher, b->stock);
-}
-
-void print_books(DB *db) {
-    //Print all the entered books
-    int i;
-    printf("\n%-33s%-20s%-19s%-20s\n\n", "Title", "Author", "Publisher", "Stock");
-    for (i = 0; i < db->library.book_count; i++) {
-        struct Book b = db->library.books[db->library.keys[i]];
-        printf("\n%d. ", i + 1);
-        print_book(&b);
-    }
-}
-
 int add_book(DB *db, struct Book *book) {
     //Generate hash address for the book
     unsigned long hash = gen_hash(gen_key(book->title));
@@ -95,6 +97,7 @@ int add_book(DB *db, struct Book *book) {
     return offset;
 }
 
+/* Find book by its ID */
 struct Book *find_by_id(DB *db, int id) {
 
     if (key_in_table(id, &db->library) == -1) {
@@ -105,17 +108,7 @@ struct Book *find_by_id(DB *db, int id) {
     }
 }
 
-int update_book(DB *db, int id, int stock) {
-    struct Book *book = find_by_id(db, id);
-    if (book) {
-        book->stock = stock;
-        return save(db);
-    }
-    return 0;
-}
-
 /* Find a book by its exact title */
-// To Do: match by clean
 struct Book *find_book(DB *db, char *title) {
     unsigned long key = gen_hash(gen_key(title));
 
@@ -138,9 +131,10 @@ struct Book *find_book(DB *db, char *title) {
 
 }
 
-//Fuzzy Search of Books by title, author or publisher. Returns an integer array
-//containing the id of books
-//To Do: Reorganize Similar Code
+/**
+ * Fuzzy Search of Books by title, author or publisher. Returns an integer
+ *  array containing the ids of the found books
+ */
 int *search_books(DB *db, char *search, int mode) {
     int i;
     int *list = (int *) calloc(1000, sizeof(int));
@@ -187,6 +181,16 @@ int *search_books(DB *db, char *search, int mode) {
             printf("Invalid Mode. Range 0~2\n");
             return NULL;
     }
+}
+
+/* Updates the stock of the book */
+int update_book(DB *db, int id, int stock) {
+    struct Book *book = find_by_id(db, id);
+    if (book) {
+        book->stock = stock;
+        return save(db);
+    }
+    return 0;
 }
 
 #endif
