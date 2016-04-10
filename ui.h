@@ -151,9 +151,9 @@ int add_to_stock() {
     b.stock = count;
 
     if (add_book(&db, &b) != -1)
-        prompt("Book entered in database.");
+        return !prompt("Book entered in database.");
 
-    return 1;
+    return !prompt("");
 }
 
 int manage_stock() {
@@ -182,7 +182,7 @@ int manage_stock() {
     flush();
 
     if (stock <= 0)
-        return prompt("Book Stock should be greater than 0.");
+        return prompt("Invalid entry for stock!");
 
     update_book(&db, db.library.keys[select - 1], stock);
 
