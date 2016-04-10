@@ -5,16 +5,16 @@
 #include <stdlib.h>
 #include "transact.h"
 
+#ifdef WINDOWS
+    #define clear() system("cls")
+#else
+    #define clear() printf("\033[H\033[J")
+#endif
+
 DB db;
 
 DB *getDB() {
     return &db;
-}
-
-void clear() {
-    int i = 25;
-    while (i--)
-        printf("\n");
 }
 
 void flush() {
@@ -50,7 +50,7 @@ void ask_pass() {
             return (void) prompt("\nPassword modification cancelled.");
     }
 
-    printf("\nPassword stored successfully");
+    prompt("\nPassword stored successfully.");
 }
 
 int match_pass() {
