@@ -9,7 +9,7 @@ int main() {
 
     do {
         clear();
-        printf("\n\nWelcome to Library Management System\n\nMain Menu:\n"
+        printf("Welcome to Library Management System\n\nMain Menu:\n"
                        "1. Issue a Book\n2. Return a Book\n"
                        "3. Admin Panel\n4. Exit\n"
                        "Please select your choice : ");
@@ -46,7 +46,7 @@ void admin_panel() {
 
     do {
         clear();
-        printf("\n\nAdmin Tools\n"
+        printf("Admin Tools\n"
                        "1. See Issued Books\n2. Approve Returns\n"
                        "3. Manage Stock\n4. Change Password\n"
                        "5. Exit\nPlease select your choice : ");

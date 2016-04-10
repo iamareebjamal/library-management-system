@@ -171,7 +171,7 @@ int manage_stock() {
         return 1;
     }
 
-    if (select > db.library.book_count)
+    if (select > db.library.book_count || select < 1)
         return prompt("Invalid Selection.");
 
     printf("\n\nBook to be modified is : \n");
@@ -199,7 +199,7 @@ int issue() {
     if (db.library.book_count == 0)
         return !prompt("Sorry. The library is currently empty.");
 
-    printf("\n\nPlease select criteria for searching the book :"
+    printf("Please select criteria for searching the book :"
                    "\n1. Search by Name"
                    "\n2. Search by Author"
                    "\n3. Search by Publisher\n"
