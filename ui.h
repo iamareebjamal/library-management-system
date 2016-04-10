@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "transact.h"
 
-#ifdef WINDOWS
+#if defined(_WIN32) || defined(_WIN64)
     #define clear() system("cls")
 #else
     #define clear() printf("\033[H\033[J")
@@ -150,7 +150,6 @@ int add_to_stock() {
     strcpy(b.publisher, publisher);
     b.stock = count;
 
-    //Ha
     if (add_book(&db, &b) != -1)
         prompt("Book entered in database.");
 
@@ -263,6 +262,7 @@ int request_return() {
     if (strcmp(fac_no, "^cancel") == 0)
         return !prompt("\nReturn request of book cancelled.");
 
+    flush();
     int *list = get_issued_fac(&(db.manager), fac_no);
     if (*list == 0)
         return !prompt("\nThere are no books issued to this faculty number.");
