@@ -163,8 +163,10 @@ int manage_stock() {
     print_books(&db);
     printf("\n\nPlease enter 0 for adding a book to stock and choose "
                    "any book otherwise for modification :\n-> ");
-    scanf("%d", &select);
+    select = getchar() - '0';
     flush();
+    // If scanf() is used, any non-numeric input returns 0, which collides with
+    // actual 0 input
 
     if (select == 0) {
         while (!add_to_stock());
